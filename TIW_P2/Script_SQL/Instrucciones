@@ -1,0 +1,7 @@
+Para cargar un dump:
+
+mysql < scriptFinal.sql --user=root --password=admin
+
+Para realizar un dump:
+
+mysqldump -u root --password=admin tiw > scriptFinal.sql
