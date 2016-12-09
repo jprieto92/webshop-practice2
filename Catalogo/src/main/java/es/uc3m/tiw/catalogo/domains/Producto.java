@@ -23,30 +23,13 @@ public class Producto implements Serializable {
 	private String envios;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_publicacion")
 	private Date fechaPublicacion;
 
 	private int precio;
 
-	@Column(name="precio_negociable")
 	private String precioNegociable;
 
 	private String titulo;
-
-	//bi-directional many-to-one association to Categoria
-	@ManyToOne
-	@JoinColumn(name="id_categoria")
-	private Categoria categoria;
-
-	//bi-directional many-to-one association to Disponibilidad
-	@ManyToOne
-	@JoinColumn(name="id_disponibilidad")
-	private Disponibilidad disponibilidad;
-
-	//bi-directional many-to-one association to Usuario
-	@ManyToOne
-	@JoinColumn(name="email_usuario_propietario")
-	private Usuario usuario;
 
 	public Producto() {
 	}
@@ -107,27 +90,4 @@ public class Producto implements Serializable {
 		this.titulo = titulo;
 	}
 
-	public Categoria getCategoria() {
-		return this.categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public Disponibilidad getDisponibilidad() {
-		return this.disponibilidad;
-	}
-
-	public void setDisponibilidad(Disponibilidad disponibilidad) {
-		this.disponibilidad = disponibilidad;
-	}
-
-	public Usuario getUsuario() {
-		return this.usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }

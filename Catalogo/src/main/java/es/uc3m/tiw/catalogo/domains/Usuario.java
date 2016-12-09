@@ -1,9 +1,20 @@
 package es.uc3m.tiw.catalogo.domains;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -30,36 +41,33 @@ public class Usuario implements Serializable {
 	public static final String BUSCAR_USUARIOS_USERS = "Usuario.buscaTodosUsuariosTipoUser";
 
 	@Id
+	@Column(name="email")
 	private String email;
-
+	
+	private String nombre;
+	
 	private String apellido1;
 
 	private String apellido2;
 
 	private String ciudad;
 
-	private String contraseña;
-
+	private int telefono;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_alta")
 	private Date fechaAlta;
+	
+	private String contraseña;
 
 	@Lob
 	@Column(name="imagen_perfil")
 	private byte[] imagenPerfil;
 
-	private String nombre;
-
-	private int telefono;
-
-	//bi-directional many-to-one association to Producto
-	@OneToMany(mappedBy="usuario",  cascade = CascadeType.ALL)
-	private List<Producto> productos;
-
-	//bi-directional many-to-one association to TipoUsuario
-	@ManyToOne
-	@JoinColumn(name="id_tipoUsuario")
-	private TipoUsuario tipoUsuario;
+	//Un usuario puede tener muchos productos (one-to-many)
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="usuarioEmail")
+	private Set<Producto> producto;
 
 	public Usuario() {
 	}
@@ -134,36 +142,6 @@ public class Usuario implements Serializable {
 
 	public void setTelefono(int telefono) {
 		this.telefono = telefono;
-	}
-
-	public List<Producto> getProductos() {
-		return this.productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
-	}
-
-	public Producto addProducto(Producto producto) {
-		getProductos().add(producto);
-		producto.setUsuario(this);
-
-		return producto;
-	}
-
-	public Producto removeProducto(Producto producto) {
-		getProductos().remove(producto);
-		producto.setUsuario(null);
-
-		return producto;
-	}
-
-	public TipoUsuario getTipoUsuario() {
-		return this.tipoUsuario;
-	}
-
-	public void setTipoUsuario(TipoUsuario tipoUsuario) {
-		this.tipoUsuario = tipoUsuario;
 	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.uc3m.tiw.catalogo.domains.Producto;
@@ -37,5 +38,11 @@ public class Controller {
 	public Count cantidad(){
 		System.out.println("Cantidad Elementos");
 		return new Count(productoDAO.count());
+	}
+	
+	@RequestMapping(value="productosBusqueda", method=RequestMethod.GET)
+	public List<Producto> buscarPorNombre(@RequestParam(value="id", required=true) int id){
+		System.out.println("Buscar productos por id");
+		return productoDAO.findByProductId(id);
 	}
 }

@@ -3,6 +3,7 @@ package es.uc3m.tiw.catalogo.domains;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -26,10 +27,11 @@ public class Categoria implements Serializable {
 
 	private String nombre;
 
-	//bi-directional many-to-one association to Producto
-	@OneToMany(mappedBy="categoria")
-	private List<Producto> productos;
-
+	//Una categoria puede tener muchos productos (one-to-many)
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="categoriaId")
+	private Set<Producto> producto;
+	
 	public Categoria() {
 	}
 
@@ -57,27 +59,6 @@ public class Categoria implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public List<Producto> getProductos() {
-		return this.productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
-	}
-
-	public Producto addProducto(Producto producto) {
-		getProductos().add(producto);
-		producto.setCategoria(this);
-
-		return producto;
-	}
-
-	public Producto removeProducto(Producto producto) {
-		getProductos().remove(producto);
-		producto.setCategoria(null);
-
-		return producto;
-	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */

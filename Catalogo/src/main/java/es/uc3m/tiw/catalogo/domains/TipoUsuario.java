@@ -1,8 +1,9 @@
 package es.uc3m.tiw.catalogo.domains;
 
 import java.io.Serializable;
+import java.util.Set;
+
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="tipoUsuario")
+@Table(name="tipo_Usuario")
 @NamedQuery(name="TipoUsuario.findAll", query="SELECT t FROM TipoUsuario t")
 public class TipoUsuario implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,10 +23,11 @@ public class TipoUsuario implements Serializable {
 
 	private String nombre;
 
-	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="tipoUsuario")
-	private List<Usuario> usuarios;
-
+	//Un tipo de usuario puede tener muchos usuarios (one-to-many)
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="tipoUsuarioId")
+	private Set<Usuario> usuario;
+	
 	public TipoUsuario() {
 	}
 
@@ -51,28 +53,6 @@ public class TipoUsuario implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public List<Usuario> getUsuarios() {
-		return this.usuarios;
-	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
-	public Usuario addUsuario(Usuario usuario) {
-		getUsuarios().add(usuario);
-		usuario.setTipoUsuario(this);
-
-		return usuario;
-	}
-
-	public Usuario removeUsuario(Usuario usuario) {
-		getUsuarios().remove(usuario);
-		usuario.setTipoUsuario(null);
-
-		return usuario;
 	}
 
 }

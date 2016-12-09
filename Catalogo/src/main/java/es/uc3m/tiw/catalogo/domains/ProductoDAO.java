@@ -9,5 +9,7 @@ public interface ProductoDAO  extends CrudRepository<Producto, Integer> {
 	 // los métodos findOne, save... ya viene por herencia
 	
 	  public List<Producto> findAll();
+
+	public List<Producto> findByProductId(int id);
 	  
 }
