@@ -7,10 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -65,10 +67,13 @@ public class Usuario implements Serializable {
 	private byte[] imagenPerfil;
 
 	//Un usuario puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="usuarioEmail")
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "usuario")
 	private Set<Producto> producto;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="tipo_usuario_id")
+	private TipoUsuario tipoUsuario;
+	
 	public Usuario() {
 	}
 

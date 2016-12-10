@@ -20,6 +20,7 @@ public class Categoria implements Serializable {
 	public static final String BUSCAR_TODOS = "Categoria.findAll";
 	public static final String BUSCAR_TODOS_SOLO_ID_Y_NOMBRE = "Categoria.todos_solo_id_nombre";
 	@Id
+	@GeneratedValue
 	@Column(name="id_categoria")
 	private int idCategoria;
 
@@ -28,12 +29,21 @@ public class Categoria implements Serializable {
 	private String nombre;
 
 	//Una categoria puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="categoriaId")
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
 	private Set<Producto> producto;
 	
 	public Categoria() {
 	}
+	
+
+	public Categoria(int idCategoria, String descripccion, String nombre, Set<Producto> producto) {
+		super();
+		this.idCategoria = idCategoria;
+		this.descripccion = descripccion;
+		this.nombre = nombre;
+		this.producto = producto;
+	}
+
 
 	public int getIdCategoria() {
 		return this.idCategoria;

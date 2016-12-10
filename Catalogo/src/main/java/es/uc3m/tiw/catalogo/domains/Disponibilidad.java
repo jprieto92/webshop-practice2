@@ -23,6 +23,7 @@ public class Disponibilidad implements Serializable {
 	public static final String BUSCAR_DISPONIBILIDAD_ID = "Disponibilidad.seleccionarProductId";
 	
 	@Id
+	@GeneratedValue
 	@Column(name="id_disponibilidad")
 	private int idDisponibilidad;
 
@@ -31,8 +32,7 @@ public class Disponibilidad implements Serializable {
 	private String nombre;
 
 	//Una disponibilidad puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="disponibilidadId")
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
 	private Set<Producto> producto;
 	
 	public Disponibilidad() {
