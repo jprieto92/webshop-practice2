@@ -57,7 +57,7 @@ public class Producto implements Serializable {
 	@Id
 	@Column(name="product_id")
 	@GeneratedValue
-	private int productId;
+	private Integer productId;
 
 	private String descripccion;
 
@@ -66,7 +66,7 @@ public class Producto implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date fechaPublicacion;
 
-	private int precio;
+	private Integer precio;
 
 	private String precioNegociable;
 
@@ -105,12 +105,18 @@ public class Producto implements Serializable {
 		this.disponibilidad = disponibilidad;
 	}
 
-	public int getProductId() {
+	 /*******************************************************************
+	 * 																	*
+	 * SETTERS: Solo se modifican si el parametro es distinto de null	*
+	 * 																	*
+	 *******************************************************************/
+	
+	public Integer getProductId() {
 		return this.productId;
 	}
 
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setProductId(Integer productId) {
+		this.productId = productId != null ? productId : this.productId;
 	}
 
 	public String getDescripccion() {
@@ -118,7 +124,7 @@ public class Producto implements Serializable {
 	}
 
 	public void setDescripccion(String descripccion) {
-		this.descripccion = descripccion;
+		this.descripccion = descripccion != null ? descripccion : this.descripccion;
 	}
 
 	public String getEnvios() {
@@ -126,7 +132,7 @@ public class Producto implements Serializable {
 	}
 
 	public void setEnvios(String envios) {
-		this.envios = envios;
+		this.envios = envios != null ? envios : this.envios;
 	}
 
 	public Date getFechaPublicacion() {
@@ -134,15 +140,15 @@ public class Producto implements Serializable {
 	}
 
 	public void setFechaPublicacion(Date fechaPublicacion) {
-		this.fechaPublicacion = fechaPublicacion;
+		this.fechaPublicacion = fechaPublicacion != null ? fechaPublicacion : this.fechaPublicacion;
 	}
 
-	public int getPrecio() {
+	public Integer getPrecio() {
 		return this.precio;
 	}
 
-	public void setPrecio(int precio) {
-		this.precio = precio;
+	public void setPrecio(Integer precio) {
+		this.precio = precio != null ? precio : this.precio;
 	}
 
 	public String getPrecioNegociable() {
@@ -150,7 +156,7 @@ public class Producto implements Serializable {
 	}
 
 	public void setPrecioNegociable(String precioNegociable) {
-		this.precioNegociable = precioNegociable;
+		this.precioNegociable = precioNegociable != null ? precioNegociable : this.precioNegociable;
 	}
 
 	public String getTitulo() {
@@ -158,14 +164,14 @@ public class Producto implements Serializable {
 	}
 
 	public void setTitulo(String titulo) {
-		this.titulo = titulo;
+		this.titulo = titulo != null ? titulo : this.titulo;
 	}
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+		this.usuario = usuario != null ? usuario : this.usuario;
 	}
 
 	public Categoria getCategoria() {
@@ -173,7 +179,7 @@ public class Producto implements Serializable {
 	}
 
 	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
+		this.categoria = categoria != null ? categoria : this.categoria;
 	}
 
 	public Disponibilidad getDisponibilidad() {
@@ -181,6 +187,6 @@ public class Producto implements Serializable {
 	}
 
 	public void setDisponibilidad(Disponibilidad disponibilidad) {
-		this.disponibilidad = disponibilidad;
+		this.disponibilidad = disponibilidad != null ? disponibilidad : this.disponibilidad;
 	}
 }

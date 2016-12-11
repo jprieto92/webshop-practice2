@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,18 +45,22 @@ public class Controller {
 		System.out.println("Buscar todos los productos");
 		return productoRepository.findAll();
 	}
-	
+
 	/**
 	 * Búsqueda de un producto
 	 * @return Devuelve un producto.
 	 * @param idProducto Establece la búsqueda del producto por dicho parámetro
 	 *  */
 	@RequestMapping(value="producto", method = RequestMethod.GET)
-	public Producto productosPorId(@RequestParam(value="idProducto", required=true) int idProducto){
+	public Producto productosPorId(@RequestParam(value="idProducto", required=true) Integer idProducto){
 		System.out.println("Busca producto por id");
-		return productoRepository.findOne(idProducto);
+		Producto producto = productoRepository.findOne(idProducto);
+
+		if(producto==null)throw new DataIntegrityViolationException("No existe el producto con el id: "+idProducto);
+
+		return producto;
 	}
-	
+
 	/** 
 	 * Cantidad de productos
 	 * @return Devuelve la cantidad de productos.
@@ -126,7 +131,7 @@ public class Controller {
 	 * */
 	@RequestMapping(value="/crear", method = RequestMethod.POST)
 	public Producto crear(@RequestBody ProductoCrear productoCrear){
-		
+
 		Producto producto = new Producto(productoCrear.getDescripccion(), productoCrear.getEnvios(), productoCrear.getFechaPublicacion(), productoCrear.getPrecio(), productoCrear.getPrecioNegociable(), productoCrear.getTitulo(), null, null, null);
 		/* Se establece la categoria del producto */
 		producto.setCategoria(categoriaRepository.findOne(productoCrear.getIdCategoria()));
@@ -136,7 +141,11 @@ public class Controller {
 		producto.setUsuario(usuarioRepository.findOne(productoCrear.getEmail()));
 
 		System.out.println("Almacenar producto");
-		return productoRepository.save(producto);
+
+		Producto producto2 = productoRepository.save(producto);
+
+		System.out.println(producto2.getProductId());
+		return producto2;
 	}
 
 
@@ -144,12 +153,79 @@ public class Controller {
 	/*			  		  SECCIÓN PUT (MODIFICAR)					  */
 	/******************************************************************/
 
+	/** 
+	 * 
+	 * Ejemplo: http://localhost:8020/modificar
+	 * 	 * JSON
+	 * 
+		{
+		"productId": "15",
+		"envios": "SI",
+		"descripccion": "AA",
+		 "fechaPublicacion": "2054-10-20",
+		 "precio": 1100,
+		 "precioNegociable": "NO",
+		 "titulo": "MOTOS",
+		 "idCategoria": 2,
+		 "idDisponibilidad": 2
+		}
+	 * @throws Exception 
+	 * */
+	@RequestMapping(value="/modificar", method = RequestMethod.PUT)
+	public Producto modificar(@RequestBody ProductoCrear productoCrear){
+		System.out.println("Modificar producto");
 
+		if(productoCrear.getProductId()==null){
+			throw new DataIntegrityViolationException("Debe indicar un id de producto");
+		}
+
+		/* Se recupera el producto original */
+		Producto producto = productosPorId(productoCrear.getProductId());
+
+		/* Se efectuan las modificaciones que sean necesarias. Los setters ya controlan que no sean null */
+		producto.setProductId(productoCrear.getProductId());
+		producto.setDescripccion(productoCrear.getDescripccion());
+		producto.setEnvios(productoCrear.getEnvios());
+		producto.setFechaPublicacion(productoCrear.getFechaPublicacion());
+		producto.setPrecio(productoCrear.getPrecio());
+		producto.setPrecioNegociable(productoCrear.getPrecioNegociable());
+		producto.setTitulo(productoCrear.getTitulo());
+		/* Se busca y establece la categoria */
+		producto.setCategoria(categoriaRepository.findOne(productoCrear.getIdCategoria()));
+		/* Se busca y establece la disponibilidad */
+		producto.setDisponibilidad(disponibilidadRepository.findOne(productoCrear.getIdDisponibilidad()));
+
+		return productoRepository.save(producto);
+	}
 
 
 	/******************************************************************/
 	/*			 		  SECCIÓN DELETE (BORRAR)					  */
 	/******************************************************************/
 
+	/** 
+	 * 
+	 * Ejemplo: http://localhost:8020/eliminar
+	 * 	 * JSON
+	 * 
+		{
+		"productId": "15"
+		}
+	 * @throws Exception 
+	 * */
+	@RequestMapping(value="/eliminar", method = RequestMethod.DELETE)
+	public void eliminar(@RequestBody ProductoCrear productoCrear){
+		System.out.println("Eliminar producto con id: "+productoCrear.getProductId());
+
+		if(productoCrear.getProductId()==null){
+			throw new DataIntegrityViolationException("Debe indicar un id de producto");
+		}
+		
+		/* Se consulta que ese id de producto existe */
+		productosPorId(productoCrear.getProductId());
+		
+		productoRepository.delete(productoCrear.getProductId());
+	}
+	
 
 }

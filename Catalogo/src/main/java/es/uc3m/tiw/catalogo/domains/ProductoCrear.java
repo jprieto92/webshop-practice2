@@ -7,13 +7,15 @@ import java.util.Date;
 public class ProductoCrear implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Integer productId;
+	
 	private String descripccion;
 
 	private String envios;
 
 	private Date fechaPublicacion;
 
-	private int precio;
+	private Integer precio;
 
 	private String precioNegociable;
 
@@ -25,6 +27,14 @@ public class ProductoCrear implements Serializable {
 	
 	private int idDisponibilidad;
 
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+	
 	public String getDescripccion() {
 		return descripccion;
 	}
@@ -49,11 +59,11 @@ public class ProductoCrear implements Serializable {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
-	public int getPrecio() {
+	public Integer getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(int precio) {
+	public void setPrecio(Integer precio) {
 		this.precio = precio;
 	}
 
