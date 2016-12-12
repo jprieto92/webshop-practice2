@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +41,7 @@ public class Controller {
 	 * Búsqueda de todos los productos
 	 * @return Devuelve una lista de productos.
 	 *  */
-	@RequestMapping(value="productos", method = RequestMethod.GET)
+	@RequestMapping(value="/productos", method = RequestMethod.GET)
 	public List<Producto> productos(){
 		System.out.println("Buscar todos los productos");
 		return productoRepository.findAll();
@@ -51,32 +52,32 @@ public class Controller {
 	 * @return Devuelve un producto.
 	 * @param idProducto Establece la búsqueda del producto por dicho parámetro
 	 *  */
-	@RequestMapping(value="producto", method = RequestMethod.GET)
-	public Producto productosPorId(@RequestParam(value="idProducto", required=true) Integer idProducto){
+	@RequestMapping(value="/productos/{idProducto}", method = RequestMethod.GET)
+	public Producto productosPorId(@PathVariable("idProducto") Integer idProducto){
 		System.out.println("Busca producto por id");
 		Producto producto = productoRepository.findOne(idProducto);
-
+		System.out.println(producto);
 		if(producto==null)throw new DataIntegrityViolationException("No existe el producto con el id: "+idProducto);
 
 		return producto;
 	}
 
-	/** 
-	 * Cantidad de productos
-	 * @return Devuelve la cantidad de productos.
-	 * */
-	@RequestMapping(value="productosCount", method=RequestMethod.GET)
-	public Count cantidad(){
-		System.out.println("Cantidad Elementos");
-		return new Count(productoRepository.count());
-	}
+//	/** 
+//	 * Cantidad de productos
+//	 * @return Devuelve la cantidad de productos.
+//	 * */
+//	@RequestMapping(value="/productosCount", method=RequestMethod.GET)
+//	public Count cantidad(){
+//		System.out.println("Cantidad Elementos");
+//		return new Count(productoRepository.count());
+//	}
 
 	/** 
 	 * Búsqueda de productos por email
 	 * @param email Establece la búsqueda de productos por dicho parámetro
 	 * @return Devuelve una lista de productos.
 	 * */
-	@RequestMapping(value="productosBusqueda", method=RequestMethod.GET)
+	@RequestMapping(value="/productosBusqueda", method=RequestMethod.GET)
 	public List<Producto> buscarPorEmail(@RequestParam(value="email", required=true) String email){
 		System.out.println("Buscar productos por email");
 		return productoRepository.findByUsuarioEmail(email);
@@ -87,7 +88,7 @@ public class Controller {
 	 * @param terminoBusqueda Establece la búsqueda de productos cuyo título o descripcción contenga el parámetro
 	 * @return Devuelve una lista de productos.
 	 * */
-	@RequestMapping(value="productosBusquedaSimple", method=RequestMethod.GET)
+	@RequestMapping(value="/productosBusquedaSimple", method=RequestMethod.GET)
 	public List<Producto> busquedaSimple(@RequestParam(value="terminoBusqueda", required=true) String terminoBusqueda){
 		System.out.println("Buscar productos simple");
 		return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
@@ -99,7 +100,7 @@ public class Controller {
 	 * @return Devuelve una lista de productos.
 	 * Ejemplo: http://localhost:8020/productosBusquedaAvanzada?categoriaId=1&ciudad=&email=&titulo=coche&descripccion=azul
 	 * */
-	@RequestMapping(value="productosBusquedaAvanzada", method=RequestMethod.GET)
+	@RequestMapping(value="/productosBusquedaAvanzada", method=RequestMethod.GET)
 	public List<Producto> busquedaAvanzada(
 			@RequestParam(value="categoriaId", required=true) int categoriaId, 
 			@RequestParam(value="ciudad", required=true) String ciudad, 
@@ -129,7 +130,7 @@ public class Controller {
 		"idCategoria": 1
 		}
 	 * */
-	@RequestMapping(value="/crear", method = RequestMethod.POST)
+	@RequestMapping(value="/productos", method = RequestMethod.POST)
 	public Producto crear(@RequestBody ProductoCrear productoCrear){
 
 		Producto producto = new Producto(productoCrear.getDescripccion(), productoCrear.getEnvios(), productoCrear.getFechaPublicacion(), productoCrear.getPrecio(), productoCrear.getPrecioNegociable(), productoCrear.getTitulo(), null, null, null);
@@ -171,7 +172,7 @@ public class Controller {
 		}
 	 * @throws Exception 
 	 * */
-	@RequestMapping(value="/modificar", method = RequestMethod.PUT)
+	@RequestMapping(value="/productos", method = RequestMethod.PUT)
 	public Producto modificar(@RequestBody ProductoCrear productoCrear){
 		System.out.println("Modificar producto");
 
@@ -205,26 +206,22 @@ public class Controller {
 
 	/** 
 	 * 
-	 * Ejemplo: http://localhost:8020/eliminar
-	 * 	 * JSON
+	 * Ejemplo: http://localhost:8020/productos/2
 	 * 
-		{
-		"productId": "15"
-		}
 	 * @throws Exception 
 	 * */
-	@RequestMapping(value="/eliminar", method = RequestMethod.DELETE)
-	public void eliminar(@RequestBody ProductoCrear productoCrear){
-		System.out.println("Eliminar producto con id: "+productoCrear.getProductId());
+	@RequestMapping(value="/productos/{idProducto}", method = RequestMethod.DELETE)
+	public void eliminar(@PathVariable("idProducto") Integer idProducto){
+		System.out.println("Eliminar producto con id: "+idProducto);
 
-		if(productoCrear.getProductId()==null){
+		if(idProducto==null){
 			throw new DataIntegrityViolationException("Debe indicar un id de producto");
 		}
 		
 		/* Se consulta que ese id de producto existe */
-		productosPorId(productoCrear.getProductId());
+		productosPorId(idProducto);
 		
-		productoRepository.delete(productoCrear.getProductId());
+		productoRepository.delete(idProducto);
 	}
 	
 
