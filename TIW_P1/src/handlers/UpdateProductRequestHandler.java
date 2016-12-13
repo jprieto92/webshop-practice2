@@ -58,7 +58,7 @@ public class UpdateProductRequestHandler  extends ActionHandler{
 			
 			byte[] data = new byte[(int) filePart.getSize()];
 			filePart.getInputStream().read(data, 0, data.length);
-			productoBBDD.setImagen(data);
+//			productoBBDD.setImagen(data);
 		}
 		productoBBDD.setTitulo(tituloNuevo);
 		productoBBDD.setDescripccion(descripcionNueva);

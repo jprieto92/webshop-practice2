@@ -38,7 +38,7 @@ public class CreateProductRequestHandler extends ActionHandler {
 		Part filePart = request.getPart("imagen1Producto");
 	    byte[] data = new byte[(int) filePart.getSize()];
 	    filePart.getInputStream().read(data, 0, data.length);
-		productoAInsertar.setImagen(data);
+//		productoAInsertar.setImagen(data);
 		
 		productoAInsertar.setPrecio(Integer.parseInt(request.getParameter("precioProducto")));
 		productoAInsertar.setPrecioNegociable((String) request.getParameter("precioNegociable"));

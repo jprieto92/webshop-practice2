@@ -1,8 +1,13 @@
 package handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
 import entitiesJPA.Producto;
 import entityManagers.ProductManager;
 
@@ -16,12 +21,15 @@ public class CatalogRequestHandler extends ActionHandler {
 		if(message == null){
 			message = "";
 		}
-		/*Devolvemos al jsp de catalogo todos los productos*/
+		
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
 		List<Producto> productos = null;
-		ProductManager gestorDatos = new ProductManager();
-
+		
 		try {
-			productos = gestorDatos.buscarTodos();
+			WebTarget webResource = client.target("http://localhost:8020").path("productos");
+			productos = (List<Producto>) webResource.request().accept("application/json").get(Producto.class);
+		
 		}catch(NoResultException e){
 			message = message+" "+e.getMessage()+".";
 			throw new NoResultException(message);
@@ -29,7 +37,7 @@ public class CatalogRequestHandler extends ActionHandler {
 		finally{
 			request.setAttribute("Message", message);
 		}
-
+	
 		request.setAttribute("listaDeProductos", productos);
 	}
 

@@ -92,7 +92,7 @@
 				<% List<Producto> listaProductos = (List<Producto>) request.getAttribute("listaDeProductos");
 				if(listaProductos!=null){
 					//Se reordena aleatoriamente la lista de productos
-					UtilidadesList.reordenarAleatoriamente(listaProductos);
+					//UtilidadesList.reordenarAleatoriamente(listaProductos);
 			for(Producto producto : listaProductos){%>
 
 
@@ -100,8 +100,8 @@
 					<h4><%=producto.getTitulo() %></h4>
 					<div
 						style="width: 160px; height: 160px; -webkit-border-radius: 20px; -moz-border-radius: 20px; border-radius: 20px; background: rgba(24, 188, 156, 0.5); -webkit-box-shadow: #BFBEBF 7px 7px 7px; -moz-box-shadow: #BFBEBF 7px 7px 7px; box-shadow: #BFBEBF 7px 7px 7px;">
-						<img style="width: 160px; height: 160px;"
-							src="<% out.print(UtilidadesImagen.mostrarImagen(producto.getImagen())); %>">
+						<!--  <img style="width: 160px; height: 160px;"
+							src="<% //out.print(UtilidadesImagen.mostrarImagen(producto.getImagen())); %>">-->
 					</div>
 
 					<p></p>
