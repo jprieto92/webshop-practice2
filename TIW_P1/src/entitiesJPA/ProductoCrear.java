@@ -1,4 +1,4 @@
-package es.uc3m.tiw.catalogo.domains;
+package entitiesJPA;
 
 import java.io.Serializable;
 import java.util.Date;

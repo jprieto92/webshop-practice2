@@ -42,10 +42,65 @@ public class Controller {
 	 * @return Devuelve una lista de productos.
 	 *  */
 	@RequestMapping(value="/productos", method = RequestMethod.GET)
-	public List<Producto> productos(){
+	public List<Producto> productos(
+			@RequestParam(value="email", required=false) String email, 
+			@RequestParam(value="terminoBusqueda", required=false) String terminoBusqueda,
+			@RequestParam(value="nombreCategoria", required=false) String nombreCategoria, 
+			@RequestParam(value="ciudad", required=false) String ciudad,
+			@RequestParam(value="titulo", required=false) String titulo, 
+			@RequestParam(value="descripccion", required=false) String descripccion){
+		
+		/** FALTA CORREGIRLO PARA QUE ENCAMINE CORRECTAMENTE EN FUNCIÓN DE LOS PARAMETROS
+		 * 
+		 * 
+		 */
+		
+		/* Se comprueba si se trata de una busqueda por email o de una busqueda avanzada */
+		
+		/**
+		if(email != null){
+			/* Si los cuatro restantes parametros están vacios, es una búsqueda simple */
+			/*if(ciudad == "" && nombreCategoria == "" && titulo == "" && descripccion == ""){
+
+				/** 
+				 * Búsqueda de productos por email
+				 * @param email Establece la búsqueda de productos por dicho parámetro
+				 * @return Devuelve una lista de productos.
+				 * */
+				/**
+				System.out.println("Buscar productos por email");
+				return productoRepository.findByUsuarioEmail(email);
+			}
+			else{
+
+				/** 
+				 * Búsqueda de productos avanzada
+				 * @param email Establece la búsqueda de productos por dichos parámetros
+				 * @return Devuelve una lista de productos.
+				 * Ejemplo: http://localhost:8020/productosBusquedaAvanzada?categoriaId=1&ciudad=&email=&titulo=coche&descripccion=azul
+				 * */
+				/**
+				System.out.println("Buscar productos avanzada");
+				return productoRepository.findByCategoriaNombreAndUsuarioCiudadAndUsuarioEmailAndTituloContainsAndDescripccionContains(nombreCategoria, ciudad, email, titulo, descripccion);
+			}
+		}
+		else if(terminoBusqueda!=""){
+			/** 
+			 * Búsqueda de productos simple
+			 * @param terminoBusqueda Establece la búsqueda de productos cuyo título o descripcción contenga el parámetro
+			 * @return Devuelve una lista de productos.
+			 * */
+				/**
+			System.out.println("Buscar productos simple");
+			return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
+		}
+		*/
+		/* Si los restantes parametros están vacios o la petición está incompleta, se buscan todos */
 		System.out.println("Buscar todos los productos");
 		return productoRepository.findAll();
 	}
+
+
 
 	/**
 	 * Búsqueda de un producto
@@ -62,54 +117,6 @@ public class Controller {
 		return producto;
 	}
 
-//	/** 
-//	 * Cantidad de productos
-//	 * @return Devuelve la cantidad de productos.
-//	 * */
-//	@RequestMapping(value="/productosCount", method=RequestMethod.GET)
-//	public Count cantidad(){
-//		System.out.println("Cantidad Elementos");
-//		return new Count(productoRepository.count());
-//	}
-
-	/** 
-	 * Búsqueda de productos por email
-	 * @param email Establece la búsqueda de productos por dicho parámetro
-	 * @return Devuelve una lista de productos.
-	 * */
-	@RequestMapping(value="/productosBusqueda", method=RequestMethod.GET)
-	public List<Producto> buscarPorEmail(@RequestParam(value="email", required=true) String email){
-		System.out.println("Buscar productos por email");
-		return productoRepository.findByUsuarioEmail(email);
-	}
-
-	/** 
-	 * Búsqueda de productos simple
-	 * @param terminoBusqueda Establece la búsqueda de productos cuyo título o descripcción contenga el parámetro
-	 * @return Devuelve una lista de productos.
-	 * */
-	@RequestMapping(value="/productosBusquedaSimple", method=RequestMethod.GET)
-	public List<Producto> busquedaSimple(@RequestParam(value="terminoBusqueda", required=true) String terminoBusqueda){
-		System.out.println("Buscar productos simple");
-		return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
-	}
-
-	/** 
-	 * Búsqueda de productos avanzada
-	 * @param email Establece la búsqueda de productos por dichos parámetros
-	 * @return Devuelve una lista de productos.
-	 * Ejemplo: http://localhost:8020/productosBusquedaAvanzada?categoriaId=1&ciudad=&email=&titulo=coche&descripccion=azul
-	 * */
-	@RequestMapping(value="/productosBusquedaAvanzada", method=RequestMethod.GET)
-	public List<Producto> busquedaAvanzada(
-			@RequestParam(value="categoriaId", required=true) int categoriaId, 
-			@RequestParam(value="ciudad", required=true) String ciudad, 
-			@RequestParam(value="email", required=true) String email, 
-			@RequestParam(value="titulo", required=true) String titulo, 
-			@RequestParam(value="descripccion", required=true) String descripccion){
-		System.out.println("Buscar productos avanzada");
-		return productoRepository.findByCategoriaIdCategoriaAndUsuarioCiudadAndUsuarioEmailAndTituloContainsAndDescripccionContains(categoriaId, ciudad, email, titulo, descripccion);
-	}
 
 	/******************************************************************/
 	/*			  		  SECCIÓN POST (CREAR)						  */
@@ -133,13 +140,15 @@ public class Controller {
 	@RequestMapping(value="/productos", method = RequestMethod.POST)
 	public Producto crear(@RequestBody ProductoCrear productoCrear){
 
-		Producto producto = new Producto(productoCrear.getDescripccion(), productoCrear.getEnvios(), productoCrear.getFechaPublicacion(), productoCrear.getPrecio(), productoCrear.getPrecioNegociable(), productoCrear.getTitulo(), null, null, null);
+		Producto producto = new Producto(productoCrear.getDescripccion(), productoCrear.getEnvios(), productoCrear.getFechaPublicacion(), productoCrear.getPrecio(), productoCrear.getPrecioNegociable(), productoCrear.getTitulo(), null, null, null, productoCrear.getImagen());
 		/* Se establece la categoria del producto */
 		producto.setCategoria(categoriaRepository.findOne(productoCrear.getIdCategoria()));
 		/* Se establece la disponibilidad del producto, por defecto será 'Disponible' */
 		producto.setDisponibilidad(disponibilidadRepository.findOne(1));
 		/* Se establece el propietario del producto */
 		producto.setUsuario(usuarioRepository.findOne(productoCrear.getEmail()));
+		/* Se establece la fecha de creación*/
+		producto.setFechaPublicacion(new java.util.Date());
 
 		System.out.println("Almacenar producto");
 
@@ -156,7 +165,7 @@ public class Controller {
 
 	/** 
 	 * 
-	 * Ejemplo: http://localhost:8020/modificar
+	 * Ejemplo: http://localhost:8020/productos
 	 * 	 * JSON
 	 * 
 		{
@@ -217,12 +226,12 @@ public class Controller {
 		if(idProducto==null){
 			throw new DataIntegrityViolationException("Debe indicar un id de producto");
 		}
-		
+
 		/* Se consulta que ese id de producto existe */
 		productosPorId(idProducto);
-		
+
 		productoRepository.delete(idProducto);
 	}
-	
+
 
 }

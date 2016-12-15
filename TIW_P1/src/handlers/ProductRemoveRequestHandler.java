@@ -1,7 +1,10 @@
 package handlers;
 
-import javax.persistence.NoResultException;
-import entityManagers.ProductManager;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
 
 /**ProductRemoveRequestHandler --> Se encarga de eliminar un producto de la 
  * base de datos*/
@@ -16,19 +19,26 @@ public class ProductRemoveRequestHandler  extends ActionHandler{
 		}
 		
 		//Se recupera el id del producto
-		Integer idProducto = Integer.parseInt(request.getParameter("idProducto"));
+		String idProducto = request.getParameter("idProducto");
 		
-		//Se borra el producto de la BBDD
-		ProductManager gestorDatos = new ProductManager();
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+
 		try {
-			message = message+" "+gestorDatos.darDeBaja(idProducto)+".";
-		}catch(Exception e){
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
+					.path(idProducto);
+			webResource.request().accept("application/json").delete();
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(e.getMessage());
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
-		}	
+		}
 	}
 
 }

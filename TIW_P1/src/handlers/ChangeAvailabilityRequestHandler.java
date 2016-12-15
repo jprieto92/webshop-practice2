@@ -2,8 +2,16 @@ package handlers;
 
 import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
+import entitiesJPA.ProductoCrear;
 import entityManagers.DisponibilidadManager;
 import entityManagers.ProductManager;
 
@@ -19,50 +27,34 @@ public class ChangeAvailabilityRequestHandler  extends ActionHandler{
 			message = "";
 		}
 		
+		//Se recuperan los campos de la petición
 		Integer idNuevaDisponibilidad = Integer.parseInt(request.getParameter("disponibilidadProducto"));
 		Integer idProducto = Integer.parseInt(request.getParameter("idProducto"));
 		
-		//Se obtiene el producto a modificar de la BBDD
-		ProductManager productManager= new ProductManager();
-		Producto productoBBDD = null;
-		try{
-			productoBBDD =  productManager.buscarPorId(idProducto);
-		}
-		catch(NoResultException e){
-			message = message+" "+"No existe el producto con el id "+idProducto+".";
-			throw new NoResultException(message);
-		}
-		finally{
-			request.setAttribute("Message", message);
- 		}
+		//Se crea un producto con solo las modificaciones que sufrirá el producto
+		ProductoCrear modificacionesProducto = new ProductoCrear();
+		modificacionesProducto.setProductId(idProducto);
+		modificacionesProducto.setIdDisponibilidad(idNuevaDisponibilidad);
 		
-		//Se obtiene la disponibilidad de la BBDD
-		DisponibilidadManager disponiblidadManager= new DisponibilidadManager();
-		Disponibilidad disponibilidadBBDD = null;
-		try{
-			disponibilidadBBDD =  disponiblidadManager.buscarPorId(idNuevaDisponibilidad);
-		}
-		catch(NoResultException e){
-			message = message +" "+"No existe la disponibilidad con el id "+idNuevaDisponibilidad+".";
-			throw new NoResultException(message);
-		}
-		finally{
-			request.setAttribute("Message", message);
- 		}
-		//Se cambia la disponiblidad del producto
-		productoBBDD.setDisponibilidad(disponibilidadBBDD);
 		
-		//Se actualiza el producto en la BBDD	
+		//REST Client using PUT Verb and JSON
+		Client client = ClientBuilder.newClient();
+		Producto productoInsertado = null;
+
 		try {
-			message = productManager.modificar(productoBBDD);
-		}catch(RollbackException e){
-			//Hay que lanzar una excepcion, para saber que no se ha modificado y asi mandarle a otro manejador distinto
-			message = message+" "+"Error en la modificación del producto con id "+idProducto+".";
-			throw new Exception(message);
+			WebTarget webResource = client.target("http://localhost:8020").path("productos");
+			productoInsertado =	webResource.request("application/json").accept("application/json").put(Entity.entity(modificacionesProducto,MediaType.APPLICATION_JSON),Producto.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
- 		}
+		}
 		
 		
 	}
