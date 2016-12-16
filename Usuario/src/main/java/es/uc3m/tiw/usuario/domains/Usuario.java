@@ -75,7 +75,7 @@ public class Usuario implements Serializable {
 	private TipoUsuario tipoUsuario;
 	
 	public Usuario(String email, String nombre, String apellido1, String apellido2, String ciudad, int telefono,
-			Date fechaAlta, String contraseña, TipoUsuario tipoUsuario) {
+			Date fechaAlta, String contraseña, byte[] imagenPerfil, TipoUsuario tipoUsuario) {
 		super();
 		this.email = email;
 		this.nombre = nombre;
@@ -85,6 +85,7 @@ public class Usuario implements Serializable {
 		this.telefono = telefono;
 		this.fechaAlta = fechaAlta;
 		this.contraseña = contraseña;
+		this.imagenPerfil = imagenPerfil;
 		this.tipoUsuario = tipoUsuario;
 	}
 
@@ -141,12 +142,12 @@ public class Usuario implements Serializable {
 	}
 
 	public byte[] getImagenPerfil() {
-		return this.imagenPerfil;
-	}
-
-	public void setImagenPerfil(byte[] imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
-	}
+				return imagenPerfil;
+			}
+		
+			public void setImagenPerfil(byte[] imagenPerfil) {
+				this.imagenPerfil = imagenPerfil != null ? imagenPerfil : this.imagenPerfil;
+			}
 
 	public String getNombre() {
 		return this.nombre;
