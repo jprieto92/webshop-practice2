@@ -24,8 +24,7 @@ import es.uc3m.tiw.usuario.domains.UsuarioRepository;
 
 
 @RestController
-//The following annotation is necessary to allow 
-//different domains to be able to use this microservice
+
 //La siguiente anotación es necesaria para permitir 
 //que diferente dominios puedan usar este microservicio
 @CrossOrigin
