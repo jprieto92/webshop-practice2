@@ -14,7 +14,7 @@
 <%@include file="includes/headerWithSession.jsp"%>
 
 
-	<!--  Se recupera la entidad usuario de la sesión -->
+	<!--  Se recupera la entidad producto de la peticion -->
 	<% Producto producto = (Producto) request.getAttribute("productoModificar"); %>
 
 	<!-- Register Section -->
@@ -77,6 +77,7 @@
                                 <label>Realiza envios</label>
                                 <select class="form-control" id="realizaEnviosProducto" required name ="realizaEnviosProducto">
                                 	<%if(producto.getEnvios().equals("SI")){
+                                		System.out.print(producto.getEnvios());
                                 		out.println("<option value=\"SI\" selected >SI</option>");
                                 		out.println("<option value=\"NO\" >NO</option>");
                                 		                   		

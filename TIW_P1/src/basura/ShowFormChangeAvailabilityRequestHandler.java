@@ -1,13 +1,19 @@
-package handlers;
+package basura;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.NoResultException;
-
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Disponibilidad;
+import entitiesJPA.Producto;
 import entityManagers.DisponibilidadManager;
 import entityManagers.ProductManager;
+import handlers.ActionHandler;
 
 /**ShowFormChangeAvailabilityRequestHandler --> Se encarga de mostrar 
  * las diferentes opciones para el cambio de la disponibilidad de un producto*/
@@ -24,16 +30,27 @@ public class ShowFormChangeAvailabilityRequestHandler  extends ActionHandler{
 		//Se recoge la idProducto de la peticion
 		int idProducto = Integer.parseInt(request.getParameter("idProducto"));
 
-		//Se obtiene la categoria del producto por su idProducto
-		ProductManager productManager = new ProductManager();
-		Disponibilidad disponibilidadProducto;
-		try{
-			disponibilidadProducto =  productManager.buscarDisponibilidadPorId(idProducto);
-		}
-		catch(NoResultException e){
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Producto producto = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8020").path("idProducto");
+			producto = webResource.request().accept("application/json").get(Producto.class);
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(message);
-		}	
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
+		}
+		finally{
+			request.setAttribute("Message", message);
+		}
+		
+		Disponibilidad disponibilidadProducto = producto.getDisponibilidad();
+		
 		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
 		DisponibilidadManager gestorDisponibilidades = new DisponibilidadManager();
 		List<Disponibilidad> disponibilidadesBBDD;

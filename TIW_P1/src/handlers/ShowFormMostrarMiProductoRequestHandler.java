@@ -1,8 +1,14 @@
 package handlers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
@@ -25,23 +31,41 @@ public class ShowFormMostrarMiProductoRequestHandler extends ActionHandler{
 		
 		String idProducto= request.getParameter("idProducto");
 			
-		ProductManager gestorProducto = new ProductManager();
-		Producto productoBBDD;
-		try{
-			productoBBDD =  gestorProducto.buscarPorId(Integer.parseInt(idProducto));
+		
+		
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Producto productoBBDD = null;
+		
+		try {
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
+					.path(idProducto);
+			productoBBDD = webResource.request().accept("application/json").get(Producto.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existe el producto"+".";
-			throw new NoResultException(message);
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-		String email= productoBBDD.getUsuario().getEmail();
+		
+		/** 
+		 * AQUI HAY QUE OBTENER EL USUARIO DEL PRODUCTO DE ALGUNA FORMA. AMTES SE SACABA DEL PROPIO PRODUCTO, AHORA DE LA SESION. POR AHORA PARECE QUE NO HAY PROBLEMAS
+		 * */
+		//String emailUsuarioSession= productoBBDD.getUsuario().getEmail();
+		
+		//Se recupera el email del usuario de la sesion
+		HttpSession session = request.getSession(false);
+		String emailUsuarioSession =  (String) session.getAttribute("userEmailSession");
+		
 		UserManager gestorUsuario = new UserManager();
 		Usuario usuarioBBDD;
 		try{
-			usuarioBBDD =  gestorUsuario.buscarPorEmail(email);
+			usuarioBBDD =  gestorUsuario.buscarPorEmail(emailUsuarioSession);
 		}
 		catch(NoResultException e){
 			message = message+" "+"No existe el usuario"+".";
@@ -50,6 +74,8 @@ public class ShowFormMostrarMiProductoRequestHandler extends ActionHandler{
 		finally{
 			request.setAttribute("Message", message);
 		}
+		
+		
 		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
 		DisponibilidadManager gestorDisponibilidades = new DisponibilidadManager();
 		List<Disponibilidad> disponibilidadesBBDD;

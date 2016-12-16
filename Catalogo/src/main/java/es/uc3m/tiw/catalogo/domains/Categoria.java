@@ -28,20 +28,20 @@ public class Categoria implements Serializable {
 
 	private String nombre;
 
-	//Una categoria puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
-	private Set<Producto> producto;
+//	//Una categoria puede tener muchos productos (one-to-many)
+//	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
+//	private Set<Producto> producto;
 	
 	public Categoria() {
 	}
 	
 
-	public Categoria(int idCategoria, String descripccion, String nombre, Set<Producto> producto) {
+	public Categoria(int idCategoria, String descripccion, String nombre /*, Set<Producto> producto*/) {
 		super();
 		this.idCategoria = idCategoria;
 		this.descripccion = descripccion;
 		this.nombre = nombre;
-		this.producto = producto;
+//		this.producto = producto;
 	}
 
 

@@ -8,6 +8,15 @@ import handlers.ActionHandler;
 public class ComprobarPropietarioProductoRequestHandler  extends ActionHandler{
 
 	@Override
+	public void execute() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * POR AHORA ESTO YA NO LO UTILIZAREMOS
+	 * 
+	@Override
 	public void execute() throws Exception {		
 		//Mensaje para pasar entre páginas JSP para comunicar el resultado de la acción
 		String message = (String) request.getAttribute("Message");
@@ -35,5 +44,6 @@ public class ComprobarPropietarioProductoRequestHandler  extends ActionHandler{
 		}
 			
 	}
+	*/
 
 }

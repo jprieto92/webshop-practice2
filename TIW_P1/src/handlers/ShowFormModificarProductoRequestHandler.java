@@ -1,8 +1,14 @@
 package handlers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
 import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
 import entityManagers.CategoriaManager;
@@ -20,20 +26,30 @@ public class ShowFormModificarProductoRequestHandler extends ActionHandler {
 		
 		String idProducto= request.getParameter("idProducto");
 
-		List<Categoria> categoriasBBDD;
-		
-		ProductManager gestorProducto = new ProductManager();
-		Producto productoBBDD;
-		try{
-			productoBBDD =  gestorProducto.buscarPorId(Integer.parseInt(idProducto));
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Producto productoBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
+					.path(idProducto);
+
+			productoBBDD = webResource.request().accept("application/json").get(Producto.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existe el producto"+".";
-			throw new NoResultException(message);
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
+		
+		
+		
+		List<Categoria> categoriasBBDD;
 		
 		CategoriaManager gestorCategorias = new CategoriaManager();
 		try{

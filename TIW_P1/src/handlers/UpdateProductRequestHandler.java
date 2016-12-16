@@ -2,8 +2,16 @@ package handlers;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.Part;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
+import entitiesJPA.ProductoCrear;
 import entityManagers.CategoriaManager;
 import entityManagers.ProductManager;
 
@@ -25,61 +33,44 @@ public class UpdateProductRequestHandler  extends ActionHandler{
 		Part filePart = request.getPart("imagen1Producto");
 		int idCategoria= Integer.parseInt(request.getParameter("categoriaProducto"));
 		
-		//Se busca el producto en la BBDD
-		ProductManager productManager = new ProductManager();
-		Producto productoBBDD = null;
-		try{
-			productoBBDD = productManager.buscarPorId(idP);
-		}
-		catch(NoResultException e){
-			message = message+" "+"Error en la modificación del producto"+".";
-			throw new NoResultException(message);
- 		}
-		finally{
-			request.setAttribute("Message", message);
- 		}
-		
-		//Se busca la categoría en la BBDD
-		CategoriaManager categoriaManager= new CategoriaManager();
-		Categoria categoria = null;
-		try{
-			categoria = categoriaManager.buscarPorId(idCategoria);
-		}
-		catch(Exception e){
-			message = message+" "+e.getMessage()+".";
-			throw new Exception(message);
- 		}
-		finally{
-			request.setAttribute("Message", message);
- 		}
 		
 		//Se establecen los nuevos valores del producto
+		
+		ProductoCrear productoModificado = new ProductoCrear();
+		
+		//Se comprueba si se ha modificado la imagen
 		if(filePart.getSize() != 0){
-			
+
 			byte[] data = new byte[(int) filePart.getSize()];
 			filePart.getInputStream().read(data, 0, data.length);
-//			productoBBDD.setImagen(data);
+			productoModificado.setImagen(data);
 		}
-		productoBBDD.setTitulo(tituloNuevo);
-		productoBBDD.setDescripccion(descripcionNueva);
-		productoBBDD.setPrecio(Integer.parseInt(request.getParameter("precioProducto")));
-		productoBBDD.setPrecioNegociable((String) request.getParameter("precioNegociable"));
-		productoBBDD.setEnvios((String) request.getParameter("realizaEnviosProducto"));
-		productoBBDD.setCategoria(categoria);
-		
-		
-		//Se actualiza el producto en la BBDD
-		try{
-			message = productManager.modificar(productoBBDD);
+		productoModificado.setProductId(idP);
+		productoModificado.setTitulo(tituloNuevo);
+		productoModificado.setDescripccion(descripcionNueva);
+		productoModificado.setPrecio(Integer.parseInt(request.getParameter("precioProducto")));
+		productoModificado.setPrecioNegociable((String) request.getParameter("precioNegociable"));
+		productoModificado.setEnvios((String) request.getParameter("realizaEnviosProducto"));
+		productoModificado.setIdCategoria(idCategoria);
+
+		//REST Client using PUT Verb and JSON
+		Client client = ClientBuilder.newClient();
+		Producto productoInsertado = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8020").path("productos");
+			productoInsertado =	webResource.request("application/json").accept("application/json").put(Entity.entity(productoModificado,MediaType.APPLICATION_JSON),Producto.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
 		catch(Exception e){
-			message = message+" "+"Error en la actualización del producto"+".";
-			throw new Exception(message);
- 		}
+			throw e;
+		}
 		finally{
 			request.setAttribute("Message", message);
- 		}
-
+		}
 	}
 
 }
