@@ -65,7 +65,11 @@
 						for(Mensaje mensajeNuevo : mensajesRecibidos){%>
                        <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <textarea cols="100" rows="4" placeholder="<%out.print(mensajeNuevo.getMensaje());%>" disabled></textarea>
+                                <%if(mensajeNuevo.getEmisor().equals(usuarioSession)){ %>
+                                	<textarea style="background-color: #58FA58; text-align: right; color:black;" cols="100" rows="4" placeholder="" disabled><%out.print(mensajeNuevo.getMensaje());%></textarea>
+                                <%}else{ %>
+                                	<textarea style="background-color: #E6E6E6; text-align: left; color:black; margin:5px;" cols="100" rows="4" placeholder="" disabled><%out.print(mensajeNuevo.getMensaje());%></textarea>
+                                	<%} %>
                             </div>
                         </div>
                      <%}}%>

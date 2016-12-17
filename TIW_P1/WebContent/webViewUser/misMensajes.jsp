@@ -50,8 +50,8 @@
                     <hr class="star-light">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+            <div style="color:black;"class="row">
+                <div style="color:black;" class="col-lg-8 col-lg-offset-2">
                     <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
                     <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
                     <!-- IMPORTANTE, BUCLE FOR QUE GENERA ESTE CÓDIGO TANTAS VECES COMO MENSAJES TENGAMOS -->
@@ -63,9 +63,13 @@
                     </div>
              		<%if(mensajesRecibidos!=null){
 						for(Mensaje mensajeNuevo : mensajesRecibidos){%>
-                       <div class="row control-group">
-                            <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <textarea cols="100" rows="4" placeholder="<%out.print(mensajeNuevo.getMensaje());%>" disabled></textarea>
+                       <div  style="color:black;" class="row control-group">
+                            <div style="color:black;" class="form-group col-xs-12 floating-label-form-group controls">
+                                <%if(mensajeNuevo.getEmisor().equals(usuarioSession)){ %>
+                                	<textarea style="background-color: #58FA58; text-align: right; color:black;" cols="100" rows="4" placeholder="" disabled><%out.print(mensajeNuevo.getMensaje());%></textarea>
+                                <%}else{ %>
+                                	<textarea style="background-color: #E6E6E6; text-align: left; color:black; margin:5px;" cols="100" rows="4" placeholder="" disabled><%out.print(mensajeNuevo.getMensaje());%></textarea>
+                                	<%} %>
                             </div>
                         </div>
                         <%}}%>
