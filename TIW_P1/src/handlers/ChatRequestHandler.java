@@ -33,7 +33,7 @@ public class ChatRequestHandler extends ActionHandler {
 		//REST Client using GET Verb and Path Variable
 		Client client = ClientBuilder.newClient();
 				
-		// Pedimos los emisores que nos han enviado mensajes
+		// Pedimos los mensajes que nos han enviado mensajes
 		List<Mensaje> listaMensajes = new ArrayList<Mensaje>();
 		
 		try {

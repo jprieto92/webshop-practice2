@@ -53,9 +53,12 @@ public class Mensaje implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_publicacion")
 	private Date fechaPublicacion;
+	
+	
 	public Mensaje(){
 		
 	}
+	
 	public Mensaje(String emisor, String receptor, String mensaje) {
 		super();
 		this.emisor = emisor;

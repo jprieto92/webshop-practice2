@@ -31,7 +31,7 @@ public class SentMessageRequestHandler extends ActionHandler {
 		//REST Client using POST Verb and JSON
 		Client client = ClientBuilder.newClient();
 		try {
-			WebTarget webResource = client.target("http://localhost:8020").path("mensajes");
+			WebTarget webResource = client.target("http://localhost:8030").path("mensajes");
 			mensajeInsertado =	webResource.request("application/json").accept("application/json").post(Entity.entity(mensajeNuevo,MediaType.APPLICATION_JSON),Mensaje.class);
 		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";

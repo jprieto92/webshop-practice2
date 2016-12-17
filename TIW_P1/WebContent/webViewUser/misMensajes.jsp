@@ -39,7 +39,7 @@
 <%String mensaje = (String) request.getAttribute("chatMessage");
   HttpSession sesion = request.getSession(false);
   String usuarioSession = (String) session.getAttribute("userEmailSession");
-  String conversacion= (String) session.getAttribute("conversacion");
+  String conversacion= (String) request.getAttribute("conversacion");
   List<Mensaje> mensajesRecibidos =  (List<Mensaje>)request.getAttribute("mensajesRecibidos");%>
 <!-- Register Product Section -->
     <section id="MessageSection">

@@ -1,5 +1,6 @@
 package es.uc3m.tiw.chat;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,13 +38,27 @@ public class Controller {
 	 * @return Devuelve una lista de usuarios.
 	 *  */
 	@RequestMapping(value="/users", method = RequestMethod.GET)
-	public List<String> conversaciones(
-			
-			@RequestParam(value="email", required=false) String email) 
-			{
+	public List<Mensaje> conversaciones(@RequestParam(value="email", required=false) String email) 
+	{
 		System.out.println("conversaciones");
-				return mensajeRepository.findConversations(email);
+		List<Mensaje> listaMensajes = mensajeRepository.findConversations(email);
+
+		/* Se limpian los emisores duplicados */
+		List<Mensaje> listaMensajesAux = new ArrayList<Mensaje>();
+		listaMensajesAux.add(listaMensajes.get(0));
+
+		for(int i = 1; i < listaMensajes.size(); i++){
+			for(int j = 0; j < listaMensajesAux.size(); j++){
+				if(!listaMensajesAux.get(j).getEmisor().equals(listaMensajes.get(i).getEmisor())){
+					listaMensajesAux.add(listaMensajes.get(i));
+					break;
+				}
 			}
+		}
+		System.out.println("Probando");
+
+		return listaMensajesAux;
+	}
 
 
 	/**
@@ -55,10 +70,10 @@ public class Controller {
 	public List<Mensaje> conversacion(
 			@RequestParam(value="user1", required=false) String user1,
 			@RequestParam(value="user2", required=false) String user2)
-			{
-				
-				return mensajeRepository.findOneConversation(user1,user2);
-			}
+	{
+
+		return mensajeRepository.findOneConversation(user1,user2);
+	}
 
 
 	/******************************************************************/
@@ -92,7 +107,7 @@ public class Controller {
 		mensaje.setFechaPublicacion(new java.util.Date());
 
 		System.out.println("Almacenar mensaje");
-		
+
 		Mensaje mensaje2 = mensajeRepository.save(mensaje);
 
 		System.out.println(mensaje2.getMensajeId());
