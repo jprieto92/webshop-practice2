@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The persistent class for the usuario database table.
@@ -40,18 +42,24 @@ public class Mensaje implements Serializable {
 	@Column(name="mensajeId")
 	private int mensajeId;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="emisor")
-	private String emisor;
+	private Usuario emisor;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="receptor")
-	private String receptor;
+	private Usuario receptor;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_alta")
-	private Date fechaAlta;
+	@Column(name="fecha_publicacion")
+	private Date fechaPublicacion;
 	
+	public Mensaje(String mensajeAux) {
+		this.mensaje = mensajeAux;
+	}
+
 	public int getMensajeId() {
 		return mensajeId;
 	}
@@ -60,28 +68,29 @@ public class Mensaje implements Serializable {
 		this.mensajeId = mensajeId;
 	}
 
-	public String getEmisor() {
+
+	public Usuario getEmisor() {
 		return emisor;
 	}
 
-	public void setEmisor(String emisor) {
+	public void setEmisor(Usuario emisor) {
 		this.emisor = emisor;
 	}
 
-	public String getReceptor() {
+	public Usuario getReceptor() {
 		return receptor;
 	}
 
-	public void setReceptor(String receptor) {
+	public void setReceptor(Usuario receptor) {
 		this.receptor = receptor;
 	}
 
-	public Date getFechaAlta() {
-		return fechaAlta;
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
 	}
 
-	public void setFechaAlta(Date fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
 	}
 
 	private String mensaje;

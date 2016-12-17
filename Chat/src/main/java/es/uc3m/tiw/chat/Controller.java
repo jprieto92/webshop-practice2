@@ -40,7 +40,7 @@ public class Controller {
 	public List<Usuario> conversaciones(
 			@RequestParam(value="email", required=false) String email) 
 			{
-				return chatRepository.findAll();
+				return chatRepository.findConversations(email);
 			}
 
 
@@ -55,7 +55,7 @@ public class Controller {
 			@RequestParam(value="user1", required=false) String user2)
 			{
 				
-				return chatConversation.findConversation(user1,user2);
+				return chatRepository.findOneConversation(user1,user2);
 			}
 
 
@@ -93,7 +93,7 @@ public class Controller {
 
 		Mensaje mensaje2 = chatRepository.save(mensaje);
 
-		System.out.println(producto2.getProductId());
+		System.out.println(mensaje2.getMensajeId());
 		return mensaje2;
 	}
 
