@@ -40,107 +40,60 @@ public class Mensaje implements Serializable {
 	@Column(name="mensajeId")
 	private int mensajeId;
 	
-	private String Emisor;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="emisor")
+	private String emisor;
 	
-	private String Receptor;
-
-	private String apellido2;
-
-	private String ciudad;
-
-	private int telefono;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="receptor")
+	private String receptor;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_alta")
 	private Date fechaAlta;
 	
-	private String contraseña;
-
-	@Lob
-	@Column(name="imagen_perfil")
-	private byte[] imagenPerfil;
-
-	//Un usuario puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "usuario")
-	private Set<Producto> producto;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="tipo_usuario_id")
-	private TipoUsuario tipoUsuario;
-	
-	public Mensaje() {
+	public int getMensajeId() {
+		return mensajeId;
 	}
 
-	public String getEmail() {
-		return this.email;
+	public void setMensajeId(int mensajeId) {
+		this.mensajeId = mensajeId;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public String getEmisor() {
+		return emisor;
 	}
 
-	public String getApellido1() {
-		return this.apellido1;
+	public void setEmisor(String emisor) {
+		this.emisor = emisor;
 	}
 
-	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
+	public String getReceptor() {
+		return receptor;
 	}
 
-	public String getApellido2() {
-		return this.apellido2;
-	}
-
-	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
-	}
-
-	public String getCiudad() {
-		return this.ciudad;
-	}
-
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
-	}
-
-	public String getContraseña() {
-		return this.contraseña;
-	}
-
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setReceptor(String receptor) {
+		this.receptor = receptor;
 	}
 
 	public Date getFechaAlta() {
-		return this.fechaAlta;
+		return fechaAlta;
 	}
 
 	public void setFechaAlta(Date fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
 
-	public byte[] getImagenPerfil() {
-		return this.imagenPerfil;
+	private String mensaje;
+
+	public String getMensaje() {
+		return mensaje;
 	}
 
-	public void setImagenPerfil(byte[] imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
 	}
 
-	public String getNombre() {
-		return this.nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public int getTelefono() {
-		return this.telefono;
-	}
-
-	public void setTelefono(int telefono) {
-		this.telefono = telefono;
-	}
+	
 
 }

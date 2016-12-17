@@ -24,7 +24,7 @@ import es.uc3m.tiw.chat.domains.*;
 public class Controller {
 
 	@Autowired
-	ChatRepository chatRepository;
+	MensajeRepository chatRepository;
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
