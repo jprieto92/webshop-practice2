@@ -24,7 +24,7 @@ import es.uc3m.tiw.chat.domains.*;
 public class Controller {
 
 	@Autowired
-	ChatRepository chatRepository;
+	MensajeRepository mensajeRepository;
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
@@ -37,10 +37,12 @@ public class Controller {
 	 * @return Devuelve una lista de usuarios.
 	 *  */
 	@RequestMapping(value="/users", method = RequestMethod.GET)
-	public List<Usuario> conversaciones(
+	public List<String> conversaciones(
+			
 			@RequestParam(value="email", required=false) String email) 
 			{
-				return chatRepository.findAll();
+		System.out.println("conversaciones");
+				return mensajeRepository.findConversations(email);
 			}
 
 
@@ -52,10 +54,10 @@ public class Controller {
 	@RequestMapping(value="/mensajes", method = RequestMethod.GET)
 	public List<Mensaje> conversacion(
 			@RequestParam(value="user1", required=false) String user1,
-			@RequestParam(value="user1", required=false) String user2)
+			@RequestParam(value="user2", required=false) String user2)
 			{
 				
-				return chatConversation.findConversation(user1,user2);
+				return mensajeRepository.findOneConversation(user1,user2);
 			}
 
 
@@ -81,19 +83,19 @@ public class Controller {
 	@RequestMapping(value="/mensajes", method = RequestMethod.POST)
 	public Mensaje nuevoMensaje(@RequestBody MensajeCrear mensajeCrear){
 
-		Mensaje mensaje = new Mensaje(mensajeCrear.getMensaje());
+		Mensaje mensaje = new Mensaje(mensajeCrear.getEmisor(),mensajeCrear.getReceptor(),mensajeCrear.getMensaje());
 		/* Se establece el emisor del mensaje */
-		mensaje.setEmisor(usuarioRepository.findOne(mensajeCrear.getEmisor()));
+		//mensaje.setEmisor(mensajeCrear.getEmisor());
 		/* Se establece el receptor del mensaje */
-		mensaje.setEmisor(usuarioRepository.findOne(mensajeCrear.getReceptor()));
+		//mensaje.setEmisor(mensajeCrear.getReceptor());
 		/* Se establece la fecha de creación*/
 		mensaje.setFechaPublicacion(new java.util.Date());
 
 		System.out.println("Almacenar mensaje");
+		
+		Mensaje mensaje2 = mensajeRepository.save(mensaje);
 
-		Mensaje mensaje2 = chatRepository.save(mensaje);
-
-		System.out.println(producto2.getProductId());
+		System.out.println(mensaje2.getMensajeId());
 		return mensaje2;
 	}
 

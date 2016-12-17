@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -17,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -37,110 +40,78 @@ public class Mensaje implements Serializable {
 	public static final String BUSCAR_CONVERSACION = "Mensaje.buscarConvesacion";
 	
 	@Id
-	@Column(name="mensajeId")
-	private int mensajeId;
+	@Column(name="mensaje_id")    
+    @GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer mensajeId;
 	
-	private String Emisor;
 	
-	private String Receptor;
-
-	private String apellido2;
-
-	private String ciudad;
-
-	private int telefono;
+	private String emisor;
+	
+	
+	private String receptor;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_alta")
-	private Date fechaAlta;
+	@Column(name="fecha_publicacion")
+	private Date fechaPublicacion;
+	public Mensaje(){
+		
+	}
+	public Mensaje(String emisor, String receptor, String mensaje) {
+		super();
+		this.emisor = emisor;
+		this.receptor = receptor;
+		//this.fechaPublicacion = fechaPublicacion;
+		this.mensaje = mensaje;
+	}
 	
-	private String contraseña;
 
-	@Lob
-	@Column(name="imagen_perfil")
-	private byte[] imagenPerfil;
+	public Mensaje(String mensajeAux) {
+		this.mensaje = mensajeAux;
+	}
 
-	//Un usuario puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "usuario")
-	private Set<Producto> producto;
+	public Integer getMensajeId() {
+		return mensajeId;
+	}
 
-    @ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="tipo_usuario_id")
-	private TipoUsuario tipoUsuario;
+	public void setMensajeId(Integer mensajeId) {
+		this.mensajeId = mensajeId != null ? mensajeId : this.mensajeId;
+	}
+
+
+	public String getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(String emisor) {
+		this.emisor = emisor;
+	}
+
+	public String getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(String receptor) {
+		this.receptor = receptor;
+	}
+
+	public Date getFechaPublicacion() {
+		return fechaPublicacion;
+	}
+
+	public void setFechaPublicacion(Date fechaPublicacion) {
+		this.fechaPublicacion = fechaPublicacion;
+	}
+
+	private String mensaje;
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
 	
-	public Mensaje() {
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getApellido1() {
-		return this.apellido1;
-	}
-
-	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
-	}
-
-	public String getApellido2() {
-		return this.apellido2;
-	}
-
-	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
-	}
-
-	public String getCiudad() {
-		return this.ciudad;
-	}
-
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
-	}
-
-	public String getContraseña() {
-		return this.contraseña;
-	}
-
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
-	}
-
-	public Date getFechaAlta() {
-		return this.fechaAlta;
-	}
-
-	public void setFechaAlta(Date fechaAlta) {
-		this.fechaAlta = fechaAlta;
-	}
-
-	public byte[] getImagenPerfil() {
-		return this.imagenPerfil;
-	}
-
-	public void setImagenPerfil(byte[] imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
-	}
-
-	public String getNombre() {
-		return this.nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public int getTelefono() {
-		return this.telefono;
-	}
-
-	public void setTelefono(int telefono) {
-		this.telefono = telefono;
-	}
 
 }
