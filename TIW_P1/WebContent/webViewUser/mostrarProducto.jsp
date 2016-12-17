@@ -98,6 +98,7 @@
 					<%out.print(producto.getDisponibilidad().getNombre());%>
 				</p>
 			</div>
+		<%if(!usuario.getEmail().equals(usuarioSessionGeneral)){ %>
 		<div class="row">
 		
 			<form action="ControllerServlet" name="formVerPropietario" novalidate method="post">
@@ -109,6 +110,7 @@
 						</div>
 				</form>	
 				</div>
+		<%}%>
 				</div>
 	</section>
     <%@include file="includes/footer.jsp"%>
