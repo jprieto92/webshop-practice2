@@ -11,7 +11,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
-import entityManagers.CategoriaManager;
 
 /**ShowFormModificarProductoRequestHandler --> Se encarga de de obtener 
  * los distintos parametros para el formulario de modificacion de producto*/

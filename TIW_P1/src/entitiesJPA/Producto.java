@@ -12,64 +12,17 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "producto")
-//@NamedQueries({ 
-//	@NamedQuery(name = Producto.BUSCAR_TODOS, query = "SELECT p FROM Producto p"),
-//	@NamedQuery(name = Producto.BUSCAR_REALIZA_ENVIOS, query = "SELECT p FROM Producto p where p.envios=:envios"),
-//	@NamedQuery(name = Producto.BUSCAR_FECHA_PUBLICACION, query = "SELECT p FROM Producto p where p.fechaPublicacion=:fechaPublicacion"),
-//	@NamedQuery(name = Producto.BUSCAR_CATEGORIA, query = "SELECT p FROM Producto p where p.categoria=:categoria"),
-//	@NamedQuery(name = Producto.BUSCAR_CATEGORIA_LIKE, query = "SELECT p FROM Producto p where p.categoria.nombre LIKE :categoria"),
-//	@NamedQuery(name = Producto.BUSCAR_DISPONIBILIDAD, query = "SELECT p FROM Producto p where p.disponibilidad=:disponibilidad"),
-//	@NamedQuery(name = Producto.BUSCAR_USUARIO_PROPIETARIO, query = "SELECT p FROM Producto p where p.usuario=:usuario"),
-//	@NamedQuery(name = Producto.BUSCAR_USUARIO_PROPIETARIO_POR_EMAIL, query = "SELECT p FROM Producto p where p.usuario.email=:emailUsuario"),
-//	//Los parametros deben contener % a cada uno de los lados
-//	@NamedQuery(name = Producto.BUSCAR_DESCRIPCCION, query = "SELECT p FROM Producto p where p.descripccion LIKE :descripccion"),
-//	@NamedQuery(name = Producto.BUSCAR_TITULO_Y_DESCRIPCCION, query = "SELECT p FROM Producto p where p.titulo LIKE :titulo OR p.descripccion LIKE :descripccion"),
-//	@NamedQuery(name = Producto.BUSCAR_TITULO, query = "SELECT p FROM Producto p where p.titulo LIKE :titulo"),
-//	@NamedQuery(name = Producto.BUSCAR_USUARIO_PROPIETARIO_POR_NOMBRE, query = "SELECT p FROM Producto p JOIN p.usuario u WHERE u.nombre  LIKE :nombre"),
-//	@NamedQuery(name = Producto.BUSCAR__POR_CIUDAD, query = "SELECT p FROM Producto p JOIN p.usuario u WHERE u.ciudad  LIKE :ciudad"),
-//	@NamedQuery(name = Producto.buscarPorEmail, query = "SELECT p FROM Producto p JOIN Usuario u WHERE u.email = :emailUser"),
-//	@NamedQuery(name = Producto.BUSQUEDA_AVANZADA, query = "SELECT p FROM Producto p JOIN p.usuario u WHERE (p.titulo LIKE :titulo OR \"\"=:titulo) AND (p.descripccion LIKE :descripccion OR \"\"=:descripccion) AND (u.email=:emailUsuario OR \"\"=:emailUsuario) AND (u.ciudad=:ciudadUsuario OR \"\"=:ciudadUsuario)  AND (p.categoria.nombre=:nombreCategoria OR \"\"=:nombreCategoria)")
-//
-//})
+
 public class Producto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//	// Nombre de las busquedas mapeadas
-//	public static final String BUSCAR_TODOS = "Producto.findAll";
-//	public static final String BUSCAR_REALIZA_ENVIOS = "Producto.seleccionarRealizaEnvios";
-//	public static final String BUSCAR_FECHA_PUBLICACION = "Producto.seleccionarFechaPublicacion";
-//	public static final String BUSCAR_CATEGORIA = "Producto.seleccionarCategoria";
-//	public static final String BUSCAR_CATEGORIA_LIKE = "Producto.seleccionarCategoriaLike";
-//	public static final String BUSCAR_DISPONIBILIDAD = "Producto.seleccionarDisponibilidad";
-//	public static final String BUSCAR_USUARIO_PROPIETARIO = "Producto.seleccionarUsuarioPropietario";
-//	public static final String BUSCAR_USUARIO_PROPIETARIO_POR_EMAIL = "Producto.seleccionarUsuarioPropietarioPorEmail";
-//	public static final String BUSCAR_DESCRIPCCION = "Producto.seleccionarDescripccion";
-//	public static final String BUSCAR_TITULO_Y_DESCRIPCCION = "Producto.seleccionarTituloYDescripccion";
-//	public static final String BUSCAR_TITULO = "Producto.seleccionarTitulo";
-//	public static final String BUSCAR__POR_CIUDAD = "Producto.seleccionarPorCiudad";
-//	public static final String BUSCAR_USUARIO_PROPIETARIO_POR_NOMBRE = "Producto.seleccionarPorNombreUsuario";
-//	public static final String buscarPorEmail = "Producto.buscarPorEmail";
-//	public static final String BUSQUEDA_AVANZADA = "Producto.busquedaAvanzada";
-	
 	@Id
 	@Column(name="product_id")
 	@GeneratedValue
 	private Integer productId;
 
-	private String descripccion;
 
-	private String envios;
-
-	@Temporal(TemporalType.DATE)
-	private Date fechaPublicacion;
-
-	private Integer precio;
-
-	private String precioNegociable;
-
-	private String titulo;
-	
     @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="email_usuario_propietario")
 	private Usuario usuario;
@@ -77,10 +30,23 @@ public class Producto implements Serializable {
     @ManyToOne
 	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
-    
+	
     @ManyToOne
 	@JoinColumn(name="disponibilidad_id")
 	private Disponibilidad disponibilidad;
+    
+	private String descripccion;
+
+	private String titulo;
+
+	private Integer precio;
+	
+	private String precioNegociable;
+	
+	private String envios;
+
+	@Temporal(TemporalType.DATE)
+	private Date fechaPublicacion;
     
 	@Lob
 	private byte[] imagen;

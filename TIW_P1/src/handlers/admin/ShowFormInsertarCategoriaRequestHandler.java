@@ -12,8 +12,6 @@ import javax.ws.rs.core.MediaType;
 import entitiesJPA.Categoria;
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
-import entityManagers.CategoriaManager;
-import entityManagers.DisponibilidadManager;
 import handlers.ActionHandler;
 
 /**ChangeAvailabilityRequestHandler --> Manejador que cambia la disponibilidad
@@ -28,32 +26,9 @@ public class ShowFormInsertarCategoriaRequestHandler  extends ActionHandler{
 			message = "";
 		}
 		
-		String nombre = (request.getParameter("nombreCategoria"));
-		String descripcion = (request.getParameter("descripcionCategoria"));
-		
-		/* Se genera la nueva categoria */
-		Categoria categoriaAInsertar = new Categoria();
-		categoriaAInsertar.setNombre(nombre);
-		categoriaAInsertar.setDescripccion(descripcion);
-
-		//REST Client using POST Verb and JSON
-		Client client = ClientBuilder.newClient();
-		Categoria categoriaInsertada = null;
-
-		try {
-			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
-			categoriaInsertada = webResource.request("application/json").accept("application/json").post(Entity.entity(categoriaAInsertar,MediaType.APPLICATION_JSON),Categoria.class);
-
-		}catch(WebApplicationException e){
-			message = message+" "+e.getMessage()+".";
-			throw e;		
-		}
-		catch(Exception e){
-			throw e;
-		}
-		finally{
-			request.setAttribute("Message", message);
-		}
+		/**
+		 * CLASE POR SI EN UN FUTURO EL FORMULARIO NECESITA ALGÚN DATO PREVIO QUE MOSTRAR
+		 *  */
 		
 		request.setAttribute("Message", message);
 	}

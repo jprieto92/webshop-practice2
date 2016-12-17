@@ -11,7 +11,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
 
 /**ListadoUsuariosRequestHandler --> Se encarga de consultar
  * los usuarios de la bbdd y devolver una lista con aquellos
@@ -30,7 +29,8 @@ public class ListadoUsuariosRequestHandler extends ActionHandler {
 		List<Usuario> usuarios = null;
 
 		try {
-			WebTarget webResource = client.target("http://localhost:8010").path("usuarios");
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios")
+					.queryParam("idTipoUsuario", 1);
 			usuarios = Arrays.asList(webResource.request().accept("application/json").get(Usuario[].class));
 
 		}catch(WebApplicationException e){

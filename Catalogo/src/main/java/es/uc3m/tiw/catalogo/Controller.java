@@ -50,12 +50,12 @@ public class Controller {
 			@RequestParam(value="descripccion", required=false) String descripccion){
 
 
-		//		System.out.println("El email pasado por parametros es: "+email);
-		//		System.out.println("El terminoBusqueda pasado por parametros es: "+terminoBusqueda);
-		//		System.out.println("El nombreCategoria pasado por parametros es: "+nombreCategoria);
-		//		System.out.println("La ciudad pasado por parametros es: "+ciudad);
-		//		System.out.println("El titulo pasado por parametros es: "+titulo);
-		//		System.out.println("La descripccion pasado por parametros es: "+descripccion);
+				System.out.println("El email pasado por parametros es: "+email);
+				System.out.println("El terminoBusqueda pasado por parametros es: "+terminoBusqueda);
+				System.out.println("El nombreCategoria pasado por parametros es: "+nombreCategoria);
+				System.out.println("La ciudad pasado por parametros es: "+ciudad);
+				System.out.println("El titulo pasado por parametros es: "+titulo);
+				System.out.println("La descripccion pasado por parametros es: "+descripccion);
 
 
 		/* Se comprueba si se trata de una busqueda simple */
@@ -70,7 +70,7 @@ public class Controller {
 			return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
 
 		}
-		else if((email!="" && email != null)){
+		else if((email != null)){
 
 			if((ciudad != "" && ciudad != null) 
 				|| (nombreCategoria != "" && nombreCategoria != null) 
@@ -199,6 +199,7 @@ public class Controller {
 		producto.setPrecio(productoCrear.getPrecio());
 		producto.setPrecioNegociable(productoCrear.getPrecioNegociable());
 		producto.setTitulo(productoCrear.getTitulo());
+		producto.setImagen(productoCrear.getImagen());
 		/* Se busca y establece la categoria */
 		producto.setCategoria(categoriaRepository.findOne(productoCrear.getIdCategoria()));
 		/* Se busca y establece la disponibilidad */

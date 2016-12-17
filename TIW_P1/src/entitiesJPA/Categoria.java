@@ -2,7 +2,6 @@ package entitiesJPA;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 
@@ -21,9 +20,9 @@ public class Categoria implements Serializable {
 	@Column(name="id_categoria")
 	private int idCategoria;
 
-	private String descripccion;
-
 	private String nombre;
+	
+	private String descripccion;
 
 	//Una categoria puede tener muchos productos (one-to-many)
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
@@ -32,14 +31,19 @@ public class Categoria implements Serializable {
 	public Categoria() {
 	}
 	
-
-	public Categoria(int idCategoria, String descripccion, String nombre/*, Set<Producto> producto*/) {
+	public Categoria(String nombre, String descripccion) {
+		super();
+		this.nombre = nombre;
+		this.descripccion = descripccion;
+	}
+	
+	public Categoria(int idCategoria, String nombre, String descripccion) {
 		super();
 		this.idCategoria = idCategoria;
-		this.descripccion = descripccion;
 		this.nombre = nombre;
-		//this.producto = producto;
+		this.descripccion = descripccion;
 	}
+	
 
 
 	public int getIdCategoria() {
@@ -50,20 +54,20 @@ public class Categoria implements Serializable {
 		this.idCategoria = idCategoria;
 	}
 
-	public String getDescripccion() {
-		return this.descripccion;
-	}
-
-	public void setDescripccion(String descripccion) {
-		this.descripccion = descripccion != null ? descripccion : this.descripccion;
-	}
-
 	public String getNombre() {
 		return this.nombre;
 	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre != null ? nombre : this.nombre;
+	}
+	
+	public String getDescripccion() {
+		return this.descripccion;
+	}
+
+	public void setDescripccion(String descripccion) {
+		this.descripccion = descripccion != null ? descripccion : this.descripccion;
 	}
 
 	/* (non-Javadoc)

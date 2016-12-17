@@ -9,7 +9,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
 
 /**UnsubscribeRequestHandler --> Se encarga de dar de baja a un usuario
  * del sistema*/

@@ -74,7 +74,7 @@ public class ControllerCategoria {
 	@RequestMapping(value="/categorias", method = RequestMethod.POST)
 	public Categoria crear(@RequestBody Categoria categoriaCrear){
 		System.out.println("Crear categoria");
-		Categoria categoria = new Categoria(categoriaCrear.getIdCategoria(),categoriaCrear.getDescripccion(),categoriaCrear.getNombre());
+		Categoria categoria = new Categoria(categoriaCrear.getDescripccion(),categoriaCrear.getNombre());
 		
 		return categoriaRepository.save(categoria);
 	}

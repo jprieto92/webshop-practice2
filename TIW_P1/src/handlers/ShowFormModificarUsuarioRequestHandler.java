@@ -11,7 +11,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
 
 /** ShowFormModificarUsuarioRequestHandler --> Se encarga de cargar las diferentes
  * opciones para el formulario de modificacion de usuario*/

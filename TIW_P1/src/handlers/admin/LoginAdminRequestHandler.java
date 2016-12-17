@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 
 import entitiesJPA.Usuario;
 import entitiesJPA.UsuarioLogin;
-import entityManagers.UserManager;
 import handlers.ActionHandler;
 
 public class LoginAdminRequestHandler extends ActionHandler {

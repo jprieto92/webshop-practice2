@@ -41,7 +41,8 @@ public class Controller {
 	 *  */
 	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
 	public List<Usuario> usuarios(@RequestParam(value="productId", required=false) Integer productId,
-			@RequestParam(value="terminoFiltrado", required=false) String terminoFiltrado){
+			@RequestParam(value="terminoFiltrado", required=false) String terminoFiltrado,
+			@RequestParam(value="idTipoUsuario", required=false) Integer idTipoUsuario){
 		
 		/* Si hemos recibido el parámetro, se realizará una búsqueda filtrada por el nombre de usuario*/
 		if(terminoFiltrado != null){
@@ -59,6 +60,14 @@ public class Controller {
 
 			return usuarios;
 		}
+		else if(idTipoUsuario != null){
+			System.out.println("Busca usuario dado id de tipo de usuario");
+			List<Usuario> usuarios = usuarioRepository.findByTipoUsuarioIdTipoUsuario(idTipoUsuario);
+			if(usuarios==null)throw new DataIntegrityViolationException("No existen usuarios con el id tipo usuario: "+idTipoUsuario);
+
+			return usuarios;
+		}
+		
 
 		/* En caso contrario, se obtendrán todos los usuarios */
 		System.out.println("Buscar todos los Usuarios");
@@ -74,7 +83,7 @@ public class Controller {
 	public Usuario usuarioPorEmail(@PathVariable("email") String email){
 		System.out.println("Busca usuario por email"+email);
 		Usuario usuario = usuarioRepository.findOne(email);
-		System.out.println(usuario);
+
 		if(usuario==null)throw new DataIntegrityViolationException("No existe el usuario con el id: "+email);
 
 		return usuario;

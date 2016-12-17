@@ -2,8 +2,6 @@ package es.uc3m.tiw.categoria.domains;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -27,16 +25,24 @@ public class Disponibilidad implements Serializable {
 	@Column(name="id_disponibilidad")
 	private int idDisponibilidad;
 
+	private String nombre;
+	
 	private String descripccion;
 
-	private String nombre;
-
-	//Una disponibilidad puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
-	private Set<Producto> producto;
+//	//Una disponibilidad puede tener muchos productos (one-to-many)
+//	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
+//	private Set<Producto> producto;
 	
 	public Disponibilidad() {
 	}
+
+
+	public Disponibilidad(String nombre, String descripccion) {
+	super();
+	this.nombre = nombre;
+	this.descripccion = descripccion;
+}
+
 
 	public int getIdDisponibilidad() {
 		return this.idDisponibilidad;

@@ -11,7 +11,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
 import handlers.ActionHandler;
 
 /**ShowFormMostrarProducto --> Se encarga de generar los parametros necesarios

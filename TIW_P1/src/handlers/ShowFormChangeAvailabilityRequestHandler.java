@@ -1,8 +1,8 @@
 package handlers;
 
+import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -10,7 +10,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
-import entityManagers.DisponibilidadManager;
 
 /**ShowFormChangeAvailabilityRequestHandler --> Se encarga de mostrar 
  * las diferentes opciones para el cambio de la disponibilidad de un producto*/
@@ -47,16 +46,21 @@ public class ShowFormChangeAvailabilityRequestHandler  extends ActionHandler{
 		finally{
 			request.setAttribute("Message", message);
 		}	
-		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
-		DisponibilidadManager gestorDisponibilidades = new DisponibilidadManager();
-		List<Disponibilidad> disponibilidadesBBDD;
-		try{
-			disponibilidadesBBDD =  gestorDisponibilidades.buscarTodas();
+
+		//REST Client using GET Verb and Path Variable
+		List<Disponibilidad> disponibilidadesBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8070").path("disponibilidades");
+			disponibilidadesBBDD = Arrays.asList(webResource.request().accept("application/json").get(Disponibilidad[].class));
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existen disponibilidades"+".";
-			throw new NoResultException(message);
-		}		
+		catch(Exception e){
+			throw e;
+		}
 		finally{
 			request.setAttribute("Message", message);
 		}

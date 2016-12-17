@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
-import entityManagers.CategoriaManager;
 import handlers.ActionHandler;
 
 /**ProductRemoveRequestHandler --> Se encarga de eliminar un producto de la 
@@ -25,13 +24,13 @@ public class InsertarCategoriaRequestHandler  extends ActionHandler{
 			message = "";
 		}
 
+		/* Se recogen los datos del formulario */
 		String nombre = (request.getParameter("nombreCategoria"));
 		String descripcion = (request.getParameter("descripcionCategoria"));
 
+		/* Se crea el nuevo objeto a insertar */
+		Categoria categoriaAInsertar = new Categoria(descripcion, nombre);
 
-		Categoria categoriaAInsertar = new Categoria();
-		categoriaAInsertar.setNombre(nombre);
-		categoriaAInsertar.setDescripccion(descripcion);
 
 		//REST Client using POST Verb and JSON
 		Client client = ClientBuilder.newClient();

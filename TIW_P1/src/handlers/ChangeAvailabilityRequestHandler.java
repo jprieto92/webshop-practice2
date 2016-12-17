@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
 import entitiesJPA.ProductoCrear;
-import entityManagers.DisponibilidadManager;
 
 /**ChangeAvailabilityRequestHandler --> Manejador que cambia la disponibilidad
  * de un producto*/

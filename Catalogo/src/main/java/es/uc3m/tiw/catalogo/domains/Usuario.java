@@ -33,6 +33,9 @@ public class Usuario implements Serializable {
 	@Column(name="email")
 	private String email;
 
+	@Lob
+	private String contraseña;
+	
 	private String nombre;
 
 	private String apellido1;
@@ -42,13 +45,6 @@ public class Usuario implements Serializable {
 	private String ciudad;
 
 	private int telefono;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name="fecha_alta")
-	private Date fechaAlta;
-	
-	@Lob
-	private String contraseña;
 
 	@Lob
 	@Column(name="imagen_perfil")
@@ -62,6 +58,11 @@ public class Usuario implements Serializable {
 	@JoinColumn(name="tipo_usuario_id")
 	private TipoUsuario tipoUsuario;
 
+
+	@Temporal(TemporalType.DATE)
+	@Column(name="fecha_alta")
+	private Date fechaAlta;
+	
 	public Usuario(String email, String nombre, String apellido1, String apellido2, String ciudad, int telefono,
 			Date fechaAlta, String contraseña, byte[] imagenPerfil, TipoUsuario tipoUsuario) {
 		super();

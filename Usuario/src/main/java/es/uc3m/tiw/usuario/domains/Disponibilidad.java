@@ -2,8 +2,6 @@ package es.uc3m.tiw.usuario.domains;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -27,9 +25,9 @@ public class Disponibilidad implements Serializable {
 	@Column(name="id_disponibilidad")
 	private int idDisponibilidad;
 
-	private String descripccion;
-
 	private String nombre;
+	
+	private String descripccion;
 
 //	//Una disponibilidad puede tener muchos productos (one-to-many)
 //	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
@@ -37,6 +35,14 @@ public class Disponibilidad implements Serializable {
 	
 	public Disponibilidad() {
 	}
+
+
+	public Disponibilidad(String nombre, String descripccion) {
+	super();
+	this.nombre = nombre;
+	this.descripccion = descripccion;
+}
+
 
 	public int getIdDisponibilidad() {
 		return this.idDisponibilidad;

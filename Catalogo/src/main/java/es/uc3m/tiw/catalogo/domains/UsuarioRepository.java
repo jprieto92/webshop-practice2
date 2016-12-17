@@ -20,4 +20,6 @@ public interface UsuarioRepository  extends CrudRepository<Usuario, String> {
 
 	public List<Usuario> findByNombreContains(String terminoFiltrado);
 
+	public List<Usuario> findByTipoUsuarioIdTipoUsuario(Integer idTipoUsuario);
+
 }

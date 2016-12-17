@@ -92,7 +92,7 @@
 				<% List<Producto> listaProductos = (List<Producto>) request.getAttribute("listaDeProductos");
 				if(listaProductos!=null){
 					//Se reordena aleatoriamente la lista de productos
-					//UtilidadesList.reordenarAleatoriamente(listaProductos);
+					listaProductos = UtilidadesList.reordenarAleatoriamente(listaProductos);
 			for(Producto producto : listaProductos){%>
 
 

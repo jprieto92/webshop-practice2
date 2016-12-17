@@ -21,9 +21,9 @@ public class TipoUsuario implements Serializable {
 	@Column(name="id_tipoUsuario")
 	private int idTipoUsuario;
 
-	private String descripccion;
-
 	private String nombre;
+	
+	private String descripccion;
 
 	//Un tipo de usuario puede tener muchos usuarios (one-to-many)
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tipoUsuario")
