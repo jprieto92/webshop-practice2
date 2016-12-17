@@ -23,6 +23,8 @@ public class ProductoCrear implements Serializable {
     
 	private String email;
     
+	private byte[] imagen;
+	
 	private int idCategoria;
 	
 	private int idDisponibilidad;
@@ -105,6 +107,14 @@ public class ProductoCrear implements Serializable {
 
 	public void setIdDisponibilidad(int idDisponibilidad) {
 		this.idDisponibilidad = idDisponibilidad;
+	}
+
+	public byte[] getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(byte[] imagen) {
+		this.imagen = imagen;
 	}
 	
 }

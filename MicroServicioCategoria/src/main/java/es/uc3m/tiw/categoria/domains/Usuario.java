@@ -30,36 +30,25 @@ import javax.persistence.TemporalType;
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-//	// Nombre de las b�squedas mapeadas
-//	public static final String BUSCAR_TODOS = "Usuario.seleccionarTodos";
-//	public static final String BUSCAR_NOMBRE = "Usuario.seleccionarNombre";
-//	public static final String BUSCAR_APELLIDO_1 = "Usuario.seleccionarApellido1";
-//	public static final String BUSCAR_APELLIDO_2 = "Usuario.seleccionarApellido2";
-//	public static final String BUSCAR_CIUDAD = "Usuario.seleccionarCiudad";
-//	public static final String BUSCAR_EMAIL = "Usuario.seleccionarEmail";
-//	public static final String BUSCAR_CREDENCIALES = "Usuario.comprobarCredenciales";
-//	public static final String BUSCAR_CREDENCIALES_SOLO_ID = "Usuario.comprobarCredencialesSoloId";
-//	public static final String DEVOLVER_TIPO_USUARIO_DADO_EMAIL = "Usuario.devuelveIdTipoUsuarioDadoEmail";
-//	public static final String BUSCAR_USUARIOS_USERS = "Usuario.buscaTodosUsuariosTipoUser";
-
 	@Id
 	@Column(name="email")
 	private String email;
-	
+
 	private String nombre;
-	
+
 	private String apellido1;
 
 	private String apellido2;
 
 	private String ciudad;
 
-	private Integer telefono;
-	
+	private int telefono;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_alta")
 	private Date fechaAlta;
 	
+	@Lob
 	private String contraseña;
 
 	@Lob
@@ -70,10 +59,10 @@ public class Usuario implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "usuario")
 	private Set<Producto> producto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="tipo_usuario_id")
 	private TipoUsuario tipoUsuario;
-	
+
 	public Usuario(String email, String nombre, String apellido1, String apellido2, String ciudad, int telefono,
 			Date fechaAlta, String contraseña, byte[] imagenPerfil, TipoUsuario tipoUsuario) {
 		super();
@@ -106,7 +95,7 @@ public class Usuario implements Serializable {
 
 	public void setApellido1(String apellido1) {
 		this.apellido1 = apellido1 != null ? apellido1 : this.apellido1;
-		
+
 	}
 
 	public String getApellido2() {
@@ -130,7 +119,9 @@ public class Usuario implements Serializable {
 	}
 
 	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña != null ? contraseña : this.contraseña;
+		if(contraseña != null | contraseña != ""){
+			this.contraseña = contraseña;
+		}
 	}
 
 	public Date getFechaAlta() {
@@ -142,12 +133,12 @@ public class Usuario implements Serializable {
 	}
 
 	public byte[] getImagenPerfil() {
-				return imagenPerfil;
-			}
-		
-			public void setImagenPerfil(byte[] imagenPerfil) {
-				this.imagenPerfil = imagenPerfil != null ? imagenPerfil : this.imagenPerfil;
-			}
+		return imagenPerfil;
+	}
+
+	public void setImagenPerfil(byte[] imagenPerfil) {
+		this.imagenPerfil = imagenPerfil != null ? imagenPerfil : this.imagenPerfil;
+	}
 
 	public String getNombre() {
 		return this.nombre;
@@ -160,12 +151,20 @@ public class Usuario implements Serializable {
 	public int getTelefono() {
 		return this.telefono;
 	}
-
-	public void setTelefono(Integer telefono) {
-		this.telefono = telefono != null ? telefono : this.telefono;
+	
+	public void setTelefono(int telefono) {
+		this.telefono = telefono;
 	}
+	
 	public void setTipoUsuario(TipoUsuario tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
+
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+
+
 
 }

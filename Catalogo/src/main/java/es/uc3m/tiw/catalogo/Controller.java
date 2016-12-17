@@ -1,6 +1,5 @@
 package es.uc3m.tiw.catalogo;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,52 +48,52 @@ public class Controller {
 			@RequestParam(value="ciudad", required=false) String ciudad,
 			@RequestParam(value="titulo", required=false) String titulo, 
 			@RequestParam(value="descripccion", required=false) String descripccion){
-		
-		/** FALTA CORREGIRLO PARA QUE ENCAMINE CORRECTAMENTE EN FUNCIÓN DE LOS PARAMETROS
-		 * 
-		 * 
-		 */
-		
-		/* Se comprueba si se trata de una busqueda por email o de una busqueda avanzada */
-		
-		/**
-		if(email != null){
-			/* Si los cuatro restantes parametros están vacios, es una búsqueda simple */
-			/*if(ciudad == "" && nombreCategoria == "" && titulo == "" && descripccion == ""){
 
-				/** 
-				 * Búsqueda de productos por email
-				 * @param email Establece la búsqueda de productos por dicho parámetro
-				 * @return Devuelve una lista de productos.
-				 * */
-				/**
-				System.out.println("Buscar productos por email");
-				return productoRepository.findByUsuarioEmail(email);
-			}
-			else{
 
+		//		System.out.println("El email pasado por parametros es: "+email);
+		//		System.out.println("El terminoBusqueda pasado por parametros es: "+terminoBusqueda);
+		//		System.out.println("El nombreCategoria pasado por parametros es: "+nombreCategoria);
+		//		System.out.println("La ciudad pasado por parametros es: "+ciudad);
+		//		System.out.println("El titulo pasado por parametros es: "+titulo);
+		//		System.out.println("La descripccion pasado por parametros es: "+descripccion);
+
+
+		/* Se comprueba si se trata de una busqueda simple */
+		if(terminoBusqueda!="" && terminoBusqueda != null){
+			/** 
+			 * Búsqueda de productos simple
+			 * @param terminoBusqueda Establece la búsqueda de productos cuyo título o descripcción contenga el parámetro
+			 * @return Devuelve una lista de productos.
+			 * */
+
+			System.out.println("Buscar productos simple");
+			return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
+
+		}
+		else if((email!="" && email != null)){
+
+			if((ciudad != "" && ciudad != null) 
+				|| (nombreCategoria != "" && nombreCategoria != null) 
+				|| (titulo != "" && titulo != null) 
+				|| (descripccion != "" && descripccion != null)){
+				
 				/** 
 				 * Búsqueda de productos avanzada
 				 * @param email Establece la búsqueda de productos por dichos parámetros
 				 * @return Devuelve una lista de productos.
 				 * Ejemplo: http://localhost:8020/productosBusquedaAvanzada?categoriaId=1&ciudad=&email=&titulo=coche&descripccion=azul
 				 * */
-				/**
+
 				System.out.println("Buscar productos avanzada");
 				return productoRepository.findByCategoriaNombreAndUsuarioCiudadAndUsuarioEmailAndTituloContainsAndDescripccionContains(nombreCategoria, ciudad, email, titulo, descripccion);
+
 			}
+			
+			return productoRepository.findByUsuarioEmail(email);
+
+
 		}
-		else if(terminoBusqueda!=""){
-			/** 
-			 * Búsqueda de productos simple
-			 * @param terminoBusqueda Establece la búsqueda de productos cuyo título o descripcción contenga el parámetro
-			 * @return Devuelve una lista de productos.
-			 * */
-				/**
-			System.out.println("Buscar productos simple");
-			return productoRepository.findByTituloContainsOrDescripccionContains(terminoBusqueda, terminoBusqueda);
-		}
-		*/
+
 		/* Si los restantes parametros están vacios o la petición está incompleta, se buscan todos */
 		System.out.println("Buscar todos los productos");
 		return productoRepository.findAll();
@@ -227,7 +226,7 @@ public class Controller {
 			throw new DataIntegrityViolationException("Debe indicar un id de producto");
 		}
 
-		/* Se consulta que ese id de producto existe */
+		/* Se consulta que ese id de producto existe. Si no existe, ya lanzará excepción el propio método */
 		productosPorId(idProducto);
 
 		productoRepository.delete(idProducto);

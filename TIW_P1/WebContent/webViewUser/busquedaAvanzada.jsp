@@ -41,7 +41,7 @@
 									List<Categoria> listaCategorias = (List<Categoria>) request.getAttribute("listaDeCategorias");
 									for (Categoria categoria : listaCategorias) {
 										out.println(
-												"<option value=\"" + categoria.getIdCategoria() + "\">" + categoria.getNombre() + "</option>");
+												"<option value=\"" + categoria.getNombre() + "\">" + categoria.getNombre() + "</option>");
 									}
 								%>
 							</select>

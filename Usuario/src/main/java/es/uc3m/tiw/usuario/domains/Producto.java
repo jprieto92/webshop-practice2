@@ -23,7 +23,7 @@ import java.util.Date;
 //	@NamedQuery(name = Producto.BUSCAR_DISPONIBILIDAD, query = "SELECT p FROM Producto p where p.disponibilidad=:disponibilidad"),
 //	@NamedQuery(name = Producto.BUSCAR_USUARIO_PROPIETARIO, query = "SELECT p FROM Producto p where p.usuario=:usuario"),
 //	@NamedQuery(name = Producto.BUSCAR_USUARIO_PROPIETARIO_POR_EMAIL, query = "SELECT p FROM Producto p where p.usuario.email=:emailUsuario"),
-//	//Los par�metros deben contener % a cada uno de los lados
+//	//Los parametros deben contener % a cada uno de los lados
 //	@NamedQuery(name = Producto.BUSCAR_DESCRIPCCION, query = "SELECT p FROM Producto p where p.descripccion LIKE :descripccion"),
 //	@NamedQuery(name = Producto.BUSCAR_TITULO_Y_DESCRIPCCION, query = "SELECT p FROM Producto p where p.titulo LIKE :titulo OR p.descripccion LIKE :descripccion"),
 //	@NamedQuery(name = Producto.BUSCAR_TITULO, query = "SELECT p FROM Producto p where p.titulo LIKE :titulo"),
@@ -37,7 +37,7 @@ public class Producto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//	// Nombre de las b�squedas mapeadas
+//	// Nombre de las busquedas mapeadas
 //	public static final String BUSCAR_TODOS = "Producto.findAll";
 //	public static final String BUSCAR_REALIZA_ENVIOS = "Producto.seleccionarRealizaEnvios";
 //	public static final String BUSCAR_FECHA_PUBLICACION = "Producto.seleccionarFechaPublicacion";
@@ -77,22 +77,23 @@ public class Producto implements Serializable {
 	@JoinColumn(name="email_usuario_propietario")
 	private Usuario usuario;
 	
-	@JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
 	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
-	
-	@JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    
+    @ManyToOne
 	@JoinColumn(name="disponibilidad_id")
 	private Disponibilidad disponibilidad;
+    
+	@Lob
+	private byte[] imagen;
     
 	public Producto() {
 	}
 
 	public Producto(String descripccion, String envios, Date fechaPublicacion, int precio,
 			String precioNegociable, String titulo, Usuario usuario, Categoria categoria,
-			Disponibilidad disponibilidad) {
+			Disponibilidad disponibilidad, byte[] imagen) {
 		super();
 		this.descripccion = descripccion;
 		this.envios = envios;
@@ -103,6 +104,7 @@ public class Producto implements Serializable {
 		this.usuario = usuario;
 		this.categoria = categoria;
 		this.disponibilidad = disponibilidad;
+		this.imagen = imagen;
 	}
 
 	 /*******************************************************************
@@ -189,4 +191,21 @@ public class Producto implements Serializable {
 	public void setDisponibilidad(Disponibilidad disponibilidad) {
 		this.disponibilidad = disponibilidad != null ? disponibilidad : this.disponibilidad;
 	}
+
+	public byte[] getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(byte[] imagen) {
+		this.imagen = imagen != null ? imagen : this.imagen;
+	}
+	
+	@Override
+	public String toString() {
+		return "Producto [productId=" + productId + ", descripccion=" + descripccion + ", envios=" + envios
+				+ ", fechaPublicacion=" + fechaPublicacion + ", precio=" + precio + ", precioNegociable="
+				+ precioNegociable + ", titulo=" + titulo + ", usuario=" + usuario + ", categoria=" + categoria
+				+ ", disponibilidad=" + disponibilidad + "]";
+	}
+	
 }

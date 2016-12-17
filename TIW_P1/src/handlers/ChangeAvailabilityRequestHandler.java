@@ -13,7 +13,6 @@ import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
 import entitiesJPA.ProductoCrear;
 import entityManagers.DisponibilidadManager;
-import entityManagers.ProductManager;
 
 /**ChangeAvailabilityRequestHandler --> Manejador que cambia la disponibilidad
  * de un producto*/

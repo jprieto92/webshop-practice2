@@ -9,7 +9,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Producto;
-import entityManagers.ProductManager;
 
 /**SearchRequestHandler --> Se encarga de realizar la busqueda simple
  * por coincidencia en el titulo*/
@@ -24,13 +23,13 @@ public class SearchRequestHandler extends ActionHandler {
 
 		/*Realizamos la busqueda simple de productos y retornamos las coincidencias obtenidas*/
 		String terminoBusqueda = request.getParameter("campoBusqueda");
-
+		
 		//REST Client using GET Verb and Path Variable
 		Client client = ClientBuilder.newClient();
 		List<Producto> productos = null;
 
 		try {
-			WebTarget webResource = client.target("http://localhost:8020").path("productosBusquedaSimple")
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
 					.queryParam("terminoBusqueda", terminoBusqueda);
 
 			productos = Arrays.asList(webResource.request().accept("application/json").get(Producto[].class));

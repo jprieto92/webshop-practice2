@@ -2,7 +2,6 @@ package handlers.user;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
-import entityManagers.ProductManager;
 import handlers.ActionHandler;
 
 public class ComprobarPropietarioProductoRequestHandler  extends ActionHandler{

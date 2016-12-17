@@ -1,9 +1,5 @@
 package handlers;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.ws.rs.WebApplicationException;
@@ -13,14 +9,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import entitiesJPA.Categoria;
-import entitiesJPA.Disponibilidad;
+
 import entitiesJPA.Producto;
 import entitiesJPA.ProductoCrear;
-import entitiesJPA.Usuario;
-import entityManagers.CategoriaManager;
-import entityManagers.ProductManager;
-import entityManagers.UserManager;
+
 
 /**CreateProductRequestHandler --> Manejador que controla la creacion
  * de un nuevo producto escribiendo en la base de datos*/

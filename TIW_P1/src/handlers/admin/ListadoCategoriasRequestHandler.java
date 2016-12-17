@@ -1,14 +1,15 @@
 package handlers.admin;
 
+import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import entitiesJPA.Categoria;
-import entitiesJPA.Usuario;
-import entityManagers.CategoriaManager;
-import entityManagers.UserManager;
+
 import handlers.ActionHandler;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 /**ListadoUsuariosRequestHandler --> Se encarga de consultar
  * los usuarios de la bbdd y devolver una lista con aquellos
@@ -22,15 +23,20 @@ public class ListadoCategoriasRequestHandler extends ActionHandler {
 			message = "";
 		}
 		
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
 		List<Categoria> listaCategorias = null;
-		CategoriaManager gestorDatosCategoria = new CategoriaManager();
-		
-		//Se buscan todos los usuarios que no sean administradores
+
 		try {
-			listaCategorias = gestorDatosCategoria.buscarTodas();
-		}catch(NoResultException e){
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
+			listaCategorias = Arrays.asList(webResource.request().accept("application/json").get(Categoria[].class));
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(message);
+			throw e;
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);

@@ -21,7 +21,7 @@ public class UtilidadesList {
 			T tAux = lista.get(valorAleatorio);
 			
 			//Se elimina el elemento
-			lista.remove(valorAleatorio);
+			lista.remove(tAux);
 			
 			//Se inserta al final de la lista
 			lista.add(tAux);

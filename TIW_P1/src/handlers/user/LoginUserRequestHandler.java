@@ -1,44 +1,59 @@
 package handlers.user;
- 
-import javax.persistence.NoResultException;
+
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
+import entitiesJPA.UsuarioLogin;
 import handlers.ActionHandler;
- 
- public class LoginUserRequestHandler extends ActionHandler {
- 
- 	public void execute () throws Exception {
+
+public class LoginUserRequestHandler extends ActionHandler {
+
+	public void execute () throws Exception {
 		//Mensaje para pasar entre páginas JSP para comunicar el resultado de la acción
 		String message = (String) request.getAttribute("Message");
 		if(message == null){
 			message = "";
 		}
- 		
-		//Recuperacion campos formulario login
- 		String email = (String) request.getParameter("emailLogin");
- 		String pass = (String) request.getParameter("passHashLogin");
- 		
-		//Comprobar que el usuario existe en la BBDD. 
-		UserManager gestorDatosUsuario = new UserManager();
 
-		String emailUserBBDD;
-		try{
-			//Se le pasa el 1 como id de tipo de usuario, que corresponde a user
-			emailUserBBDD = gestorDatosUsuario.comprobarCredencialesDevuelveEmail(email, pass, 1);
+		//Recuperacion campos formulario login
+		String email = (String) request.getParameter("emailLogin");
+		String pass = (String) request.getParameter("passHashLogin");
+		UsuarioLogin usuarioLogin = new UsuarioLogin(email, pass, 1);
+		
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Usuario usuario = null;
+		
+
+		HttpSession session = null;
+		
+		try {
+			WebTarget webResource = client.target("http://localhost:8010").path("login");
+			usuario =	webResource.request("application/json").accept("application/json").post(Entity.entity(usuarioLogin,MediaType.APPLICATION_JSON),Usuario.class);
+			//Si existe el usuario, se procede a crear la sesion
+			session = request.getSession(true);
+			
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message + " " +e.getMessage()+".";
-			throw new NoResultException(e.getMessage());
- 		}
+		catch(Exception e){
+			throw e;
+		}
 		finally{
 			request.setAttribute("Message", message);
 		}
- 		//Si existe el usuario, se procede a crear la sesion
- 		HttpSession session = request.getSession(true);
+		
+
 
 		//Añadimos a la sesion el email del usuario obtenido de la BBDD
-		session.setAttribute("userEmailSession", emailUserBBDD);
- 	}
- 	
- }
+		session.setAttribute("userEmailSession", usuario.getEmail());
+	}
+
+}

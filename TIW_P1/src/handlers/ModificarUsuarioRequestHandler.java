@@ -1,12 +1,17 @@
 package handlers;
 
 
-import javax.persistence.NoResultException;
-import javax.servlet.http.HttpSession;
+
 import javax.servlet.http.Part;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import entitiesJPA.Usuario;
-import entityManagers.UserManager;
+
 
 /**ModificarUsuarioRequestHandler --> Se encarga de modificar el usuario*/
 public class ModificarUsuarioRequestHandler extends ActionHandler {
@@ -18,10 +23,10 @@ public class ModificarUsuarioRequestHandler extends ActionHandler {
 		if(message == null){
 			message = "";
 		}
-		
+
 		//Se recupera el email del usuario a modificar
 		String emailUsuario =  (String) request.getAttribute("emailUserModificar");
-		
+
 		//Recogemos los datos del formulario
 		String nuevaContraseña = request.getParameter("passHashRegister");
 		String nuevoNombre = request.getParameter("name");
@@ -29,53 +34,44 @@ public class ModificarUsuarioRequestHandler extends ActionHandler {
 		String nuevoApellido2 = request.getParameter("apellido2");
 		String nuevaCiudad = request.getParameter("ciudad");
 		Integer nuevoTelefono =  Integer.parseInt(request.getParameter("phone")) ;
-		
-		//Buscamos al usuario en la BBDD
-		UserManager userManager = new UserManager();
-		Usuario usuarioBBDD = null;
-		try{
-			usuarioBBDD = userManager.buscarPorEmail(emailUsuario);
 
-		}catch(NoResultException e){
-			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(message);
-		}
-		finally{
-			request.setAttribute("Message", message);
-		}
+		Usuario usuarioModificado = new Usuario();
 		
-		//Actualizamos los datos del usuarioBBDD acorde a las modificaciones solicitadas
-		
-		//Si la constraseña no ha variado, no se modifica
-		if(nuevaContraseña!= ""){
-			usuarioBBDD.setContraseña(nuevaContraseña);
-		}
 		//Si la imagen no ha variado, no se modifica
 		Part filePart = request.getPart("imagenPerfil");
 		if(filePart.getSize() != 0){			
 			byte[] data = new byte[(int) filePart.getSize()];
 			filePart.getInputStream().read(data, 0, data.length);
-			usuarioBBDD.setImagenPerfil(data);;
+			usuarioModificado.setImagenPerfil(data);;
 		}
 		//El resto de parametros siempre se modifican, puesto que los campos ya tienen un valor por defecto
-		usuarioBBDD.setNombre(nuevoNombre);
-		usuarioBBDD.setApellido1(nuevoApellido1);
-		usuarioBBDD.setApellido2(nuevoApellido2);
-		usuarioBBDD.setCiudad(nuevaCiudad);
-		usuarioBBDD.setTelefono(nuevoTelefono);
+		usuarioModificado.setNombre(nuevoNombre);
+		usuarioModificado.setApellido1(nuevoApellido1);
+		usuarioModificado.setApellido2(nuevoApellido2);
+		usuarioModificado.setCiudad(nuevaCiudad);
+		usuarioModificado.setTelefono(nuevoTelefono);
+		usuarioModificado.setContraseña(nuevaContraseña);
+		usuarioModificado.setEmail(emailUsuario);
 		
-		//Actualizamos el usuario en la BBDD
-		try{
-			message = message+" ."+userManager.modificar(usuarioBBDD);
+		//REST Client using PUT Verb and JSON
+		Client client = ClientBuilder.newClient();
+		Usuario usuarioInsertado = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios");
+			usuarioInsertado =	webResource.request("application/json").accept("application/json").put(Entity.entity(usuarioModificado,MediaType.APPLICATION_JSON),Usuario.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
 		catch(Exception e){
-			message = message+" "+"Error en la modificación del usuario"+".";
-			throw new Exception(message);
- 		}
+			throw e;
+		}
 		finally{
 			request.setAttribute("Message", message);
- 		}
-		
+		}
+
 	}
 
 }

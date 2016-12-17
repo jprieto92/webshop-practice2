@@ -1,6 +1,15 @@
 package handlers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
 import entityManagers.UserManager;
 
@@ -13,24 +22,30 @@ public class ShowFormModificarUsuarioRequestHandler  extends ActionHandler{
 		if(message == null){
 			message = "";
 		}
-		
+
 		//Se recupera el email del usuario a modificar
 		String emailUsuario =  (String) request.getAttribute("emailUserModificar");
-		
-		//Buscamos al usuario en la BBDD
-		UserManager userManager = new UserManager();
-		Usuario usuarioBBDD = null;
-		try{
-			usuarioBBDD = userManager.buscarPorEmail(emailUsuario);
 
-		}catch(NoResultException e){
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Usuario usuarioBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios")
+					.path(emailUsuario);
+			usuarioBBDD = webResource.request().accept("application/json").get(Usuario.class);
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(e.getMessage());
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
+
 		// Se añaden a la petición el usuario
 		request.setAttribute("userEntity", usuarioBBDD);
 	}

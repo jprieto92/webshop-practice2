@@ -24,7 +24,8 @@ public class UserManager {
 	{
 		emf = Persistence.createEntityManagerFactory("tiwUnitPersistence");
 	}  
-
+	
+	/*
 	public String insertar(Usuario usuario) throws Exception {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -46,13 +47,14 @@ public class UserManager {
 		}
 		return "El usuario "+usuario.getNombre()+" "+usuario.getApellido1()+" "+usuario.getApellido2()+" "+" se ha insertado correctamente";
 	}
-	
+	*/
 	/**
 	 * Actualiza un usuario dado su entidad
 	 * @param usuario
 	 * @return String message
 	 * @throws Exception
 	 */
+	/*
 	public String modificar(Usuario usuario) throws Exception {
 		EntityManager em = emf.createEntityManager();
 		try {
@@ -75,13 +77,15 @@ public class UserManager {
 		}
 		return "El usuario "+usuario.getNombre()+" "+usuario.getApellido1()+" "+usuario.getApellido2()+" "+" se ha modificado correctamente";
 	}   
-
+	*/
+	
 	/**
 	 * Dado un email de usuario, busca la entidad usuario
 	 * @param email
 	 * @return Usuario entity
 	 * @throws Exception
 	 */
+	/*
 	public Usuario buscarPorEmail(String email) throws Exception {
 		Usuario resultado;
 		EntityManager em = emf.createEntityManager();
@@ -102,7 +106,7 @@ public class UserManager {
 			em.close();
 		}
 		return resultado;
-	}
+	}*/
 	
 	/** Devuelve el id del tipo de usuario dado un email de usuario
 	 * 
@@ -110,6 +114,8 @@ public class UserManager {
 	 * @return
 	 * @throws Exception
 	 */
+	
+	/*
 	public Integer obtenerIdTipoUsuario(String email) throws Exception {
 		Integer resultado;
 		EntityManager em = emf.createEntityManager();
@@ -130,7 +136,7 @@ public class UserManager {
 			em.close();
 		}
 		return resultado;
-	}
+	}*/
 	
 	/**
 	 * Proporciona una lista de usuarios dado coincidencias por su nombre
@@ -138,6 +144,8 @@ public class UserManager {
 	 * @return List<Usuario>
 	 * @throws Exception
 	 */
+	
+	/*
 	@SuppressWarnings("unchecked")
 	public List<Usuario> buscarPorNombre(String nombre) throws Exception {
 		List<Usuario> resultado;
@@ -166,8 +174,8 @@ public class UserManager {
 		}
 		return resultado;
 	}
-	
-
+	*/
+	/*
 	public Usuario comprobarCredenciales(String email, String contraseña, Integer idTipoUser) throws Exception {
 		Usuario resultado;
 		EntityManager em = emf.createEntityManager();
@@ -193,7 +201,9 @@ public class UserManager {
 		}
 		return resultado;
 	}
-
+	*/
+	
+	
 	/**
 	 * Método para comprobar si las credenciales pasadas son correctas. También verifica si el usuario es user o admin.
 	 * @param email
@@ -202,6 +212,8 @@ public class UserManager {
 	 * @return String con el email (campo clave) del usuario
 	 * @throws Exception
 	 */
+	
+	/*
 	public String comprobarCredencialesDevuelveEmail(String email, String contraseña, Integer idTipoUser) throws Exception {
 		String resultado;
 		EntityManager em = emf.createEntityManager();
@@ -297,5 +309,5 @@ public class UserManager {
 		return resultado;
 	}
 	
-	
+	*/
 }

@@ -31,9 +31,9 @@ public class Disponibilidad implements Serializable {
 
 	private String nombre;
 
-	//Una disponibilidad puede tener muchos productos (one-to-many)
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
-	private Set<Producto> producto;
+//	//Una disponibilidad puede tener muchos productos (one-to-many)
+//	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "disponibilidad")
+//	private Set<Producto> producto;
 	
 	public Disponibilidad() {
 	}

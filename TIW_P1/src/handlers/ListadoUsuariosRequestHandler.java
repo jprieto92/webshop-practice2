@@ -1,8 +1,15 @@
 package handlers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
 import entityManagers.UserManager;
 
@@ -10,29 +17,34 @@ import entityManagers.UserManager;
  * los usuarios de la bbdd y devolver una lista con aquellos
  * que no son admin*/
 public class ListadoUsuariosRequestHandler extends ActionHandler {
-	 
- 	public void execute () throws Exception {
+
+	public void execute () throws Exception {
 		//Mensaje para pasar entre páginas JSP para comunicar el resultado de la acción
 		String message = (String) request.getAttribute("Message");
 		if(message == null){
 			message = "";
 		}
-		
+
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
 		List<Usuario> usuarios = null;
-		UserManager gestorDatosUsuario = new UserManager();
-		
-		//Se buscan todos los usuarios que no sean administradores
+
 		try {
-			usuarios = gestorDatosUsuario.buscarTodosUsers();
-		}catch(NoResultException e){
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios");
+			usuarios = Arrays.asList(webResource.request().accept("application/json").get(Usuario[].class));
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(message);
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
 
 		request.setAttribute("listaDeUsuarios", usuarios);
- 		
- 	}
- }
+
+	}
+}

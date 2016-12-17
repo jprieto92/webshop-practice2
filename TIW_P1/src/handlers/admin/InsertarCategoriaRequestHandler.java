@@ -1,10 +1,16 @@
 package handlers.admin;
 
 import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import entitiesJPA.Categoria;
+import entitiesJPA.Producto;
 import entityManagers.CategoriaManager;
-import entityManagers.ProductManager;
 import handlers.ActionHandler;
 
 /**ProductRemoveRequestHandler --> Se encarga de eliminar un producto de la 
@@ -18,22 +24,29 @@ public class InsertarCategoriaRequestHandler  extends ActionHandler{
 		if(message == null){
 			message = "";
 		}
-		
+
 		String nombre = (request.getParameter("nombreCategoria"));
 		String descripcion = (request.getParameter("descripcionCategoria"));
-		
-		//Se crea la categoria en la BBDD
-		CategoriaManager gestorDatos = new CategoriaManager();
-		Categoria nuevaCategoria = new Categoria();
-		
-		nuevaCategoria.setNombre(nombre);
-		nuevaCategoria.setDescripccion(descripcion);
-		
+
+
+		Categoria categoriaAInsertar = new Categoria();
+		categoriaAInsertar.setNombre(nombre);
+		categoriaAInsertar.setDescripccion(descripcion);
+
+		//REST Client using POST Verb and JSON
+		Client client = ClientBuilder.newClient();
+		Categoria categoriaInsertada = null;
+
 		try {
-			message = message+". "+gestorDatos.insertar(nuevaCategoria);
-		}catch(Exception e){
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
+			categoriaInsertada = webResource.request("application/json").accept("application/json").post(Entity.entity(categoriaAInsertar,MediaType.APPLICATION_JSON),Categoria.class);
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(e.getMessage());
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);

@@ -34,7 +34,7 @@ public class MyProductsRequestHandler extends ActionHandler {
 		List<Producto> productos = null;
 
 		try {
-			WebTarget webResource = client.target("http://localhost:8020").path("productosBusqueda")
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
 					.queryParam("email", emailUsuarioSession);
 			productos = Arrays.asList(webResource.request().accept("application/json").get(Producto[].class));
 

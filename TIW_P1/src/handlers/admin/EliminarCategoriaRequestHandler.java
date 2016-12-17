@@ -1,12 +1,11 @@
 package handlers.admin;
 
-import java.util.List;
 
-import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
-import entitiesJPA.Producto;
-import entityManagers.CategoriaManager;
-import entityManagers.ProductManager;
 import handlers.ActionHandler;
 
 /**ProductRemoveRequestHandler --> Se encarga de eliminar un producto de la 
@@ -22,20 +21,22 @@ public class EliminarCategoriaRequestHandler  extends ActionHandler{
 		}
 
 		//Se recupera el id de la categoria
-		int idCategoria = Integer.parseInt((request.getParameter("seleccionarCategoria")));
-		
-		//Se comprueba que no existen productos con ese idCategoria
-		ProductManager gestorProdutos = new ProductManager();
-		CategoriaManager gestorCategorias = new CategoriaManager();
+		String idCategoria = request.getParameter("seleccionarCategoria");
+
+		///REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+
 		try {
-			//Comprueba si existen productos asociados
-			message = gestorProdutos.comprobarProductosAsociadosCategoria(idCategoria);
-			
-			//Si no existen, se procede a borrar la categoria
-			message = gestorCategorias.darDeBaja(idCategoria);
-		}catch(NoResultException e){
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias")
+					.path(idCategoria);
+			webResource.request().accept("application/json").delete();
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(e.getMessage());
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);

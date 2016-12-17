@@ -1,9 +1,13 @@
 package handlers;
 
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
-import entityManagers.UserManager;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import entitiesJPA.Usuario;
 import handlers.ActionHandler;
 
 /**ObtenerUsuarioRequestHandler --> Se encarga de obtener un usuario
@@ -17,28 +21,35 @@ public class ObtenerUsuarioRequestHandler extends ActionHandler {
 		if(message == null){
 			message = "";
 		}
-		
+
 		//Se recupera el email del usuario de la sesion
 		HttpSession session = request.getSession(false);
 		String emailUsuarioSession =  (String) session.getAttribute("userEmailSession");
-		
-		
-		//Buscamos el tipo de usuario en la BBDD
-		UserManager userManager = new UserManager();
-		Integer tipoUsuarioId = null;
-		try{
-			tipoUsuarioId = userManager.obtenerIdTipoUsuario(emailUsuarioSession);
 
-		}catch(NoResultException e){
-			message = message+" ."+e.getMessage();
-			throw new NoResultException(message);
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Usuario usuarioBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios")
+					.path(emailUsuarioSession);
+			usuarioBBDD = webResource.request().accept("application/json").get(Usuario.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
+
+		Integer tipoUsuarioId = usuarioBBDD.getTipoUsuario().getIdTipoUsuario();
+
 		String emailUserModificar;
-		
+
 		//Si el tipo de usuario es admin, estableceremos el email de usuario a modificar a partir del idProducto
 		if(tipoUsuarioId==2){
 			emailUserModificar = (String) request.getParameter("idUsuario");
@@ -48,7 +59,7 @@ public class ObtenerUsuarioRequestHandler extends ActionHandler {
 		else{
 			emailUserModificar = emailUsuarioSession;
 		}
-		
+
 		//Se añade a la petición el email del usuario a tratar
 		request.setAttribute("emailUserModificar", emailUserModificar);
 	}

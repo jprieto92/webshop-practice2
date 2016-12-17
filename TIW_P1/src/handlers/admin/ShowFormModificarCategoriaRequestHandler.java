@@ -1,14 +1,12 @@
 package handlers.admin;
 
-import javax.persistence.NoResultException;
-import javax.persistence.RollbackException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Categoria;
-import entitiesJPA.Disponibilidad;
-import entitiesJPA.Producto;
-import entityManagers.CategoriaManager;
-import entityManagers.DisponibilidadManager;
-import entityManagers.ProductManager;
+
 import handlers.ActionHandler;
 
 /**ChangeAvailabilityRequestHandler --> Manejador que cambia la disponibilidad
@@ -22,25 +20,32 @@ public class ShowFormModificarCategoriaRequestHandler  extends ActionHandler{
 		if(message == null){
 			message = "";
 		}
-		
+
 		String idNuevaCategoria = (request.getParameter("seleccionarCategoria"));
 		
-		CategoriaManager gestorCategoria = new CategoriaManager();
-		Categoria categoriaBBDD;
-		try{
-			categoriaBBDD =  gestorCategoria.buscarPorId(Integer.parseInt(idNuevaCategoria));
+		//REST Client using GET Verb and Path Variable
+		Client client = ClientBuilder.newClient();
+		Categoria categoriaBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias")
+					.path(idNuevaCategoria);
+			categoriaBBDD = webResource.request().accept("application/json").get(Categoria.class);
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existe el la categoria"+".";
-			throw new NoResultException(message);
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
+
 		request.setAttribute("categoriaModificar", categoriaBBDD);
-		
-		
+
+
 	}
 
 }

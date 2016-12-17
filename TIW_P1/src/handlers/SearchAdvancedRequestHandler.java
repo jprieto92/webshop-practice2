@@ -32,7 +32,7 @@ public class SearchAdvancedRequestHandler extends ActionHandler {
 		List<Producto> productos = null;
 		
 		try {
-			WebTarget webResource = client.target("http://localhost:8020").path("productosBusquedaAvanzada")
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
 					.queryParam("nombreCategoria", campoBusquedaCategoria)
 					.queryParam("ciudad", campoBusquedaCiudad)
 					.queryParam("email", campoBusquedaEmailVendedor)

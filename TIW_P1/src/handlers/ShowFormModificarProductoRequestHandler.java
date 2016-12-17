@@ -12,7 +12,6 @@ import javax.ws.rs.client.WebTarget;
 import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
 import entityManagers.CategoriaManager;
-import entityManagers.ProductManager;
 
 /**ShowFormModificarProductoRequestHandler --> Se encarga de de obtener 
  * los distintos parametros para el formulario de modificacion de producto*/
@@ -23,7 +22,7 @@ public class ShowFormModificarProductoRequestHandler extends ActionHandler {
 		if(message == null){
 			message = "";
 		}
-		
+
 		String idProducto= request.getParameter("idProducto");
 
 		//REST Client using GET Verb and Path Variable
@@ -46,23 +45,28 @@ public class ShowFormModificarProductoRequestHandler extends ActionHandler {
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
-		
-		
-		List<Categoria> categoriasBBDD;
-		
-		CategoriaManager gestorCategorias = new CategoriaManager();
-		try{
-			categoriasBBDD =  gestorCategorias.buscarTodas();
+
+
+
+		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
+		//REST Client using GET Verb
+		List<Categoria> categoriasBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
+			categoriasBBDD = Arrays.asList(webResource.request().accept("application/json").get(Categoria[].class));
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existen categorias"+".";
-			throw new NoResultException(message);
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
-		}	
-		
+		}
+
 		request.setAttribute("listaDeCategorias", categoriasBBDD);
 		request.setAttribute("productoModificar", productoBBDD);
 	}
@@ -70,5 +74,5 @@ public class ShowFormModificarProductoRequestHandler extends ActionHandler {
 }
 
 
-	
+
 

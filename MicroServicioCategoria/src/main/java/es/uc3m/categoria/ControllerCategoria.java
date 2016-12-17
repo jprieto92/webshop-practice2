@@ -13,17 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.uc3m.tiw.categoria.domains.Categoria;
 import es.uc3m.tiw.categoria.domains.CategoriaRepository;
-import es.uc3m.tiw.categoria.domains.DisponibilidadRepository;
 import es.uc3m.tiw.categoria.domains.Producto;
 import es.uc3m.tiw.categoria.domains.ProductoRepository;
-import es.uc3m.tiw.categoria.domains.TipoUsuarioRepository;
-import es.uc3m.tiw.categoria.domains.UsuarioRepository;
-
-
-
-
-
-
 
 @RestController
 //La siguiente anotación es necesaria para permitir 
@@ -34,12 +25,6 @@ public class ControllerCategoria {
 	ProductoRepository productoRepository;
 	@Autowired
 	CategoriaRepository categoriaRepository;
-	@Autowired
-	DisponibilidadRepository disponibilidadRepository;
-	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
-	@Autowired
-	UsuarioRepository usuarioRepository;
 	
 	/******************************************************************/
 	/*			    SECCIÓN GET (BÚSQUEDAS/CONSULTAS)				  */
@@ -62,32 +47,13 @@ public class ControllerCategoria {
 	 *  */
 	@RequestMapping(value="/categorias/{idCategoria}", method = RequestMethod.GET)
 	public Categoria categoriaPorId(@PathVariable("idCategoria") Integer idCategoria){
-		System.out.println("Busca usuario por id");
+		System.out.println("Busca categoria por id");
 		Categoria categoria = categoriaRepository.findOne(idCategoria);
 		System.out.println(idCategoria);
 		if(categoria == null)throw new DataIntegrityViolationException("No existe la categoria con el id: "+idCategoria);
 
 		return categoria;
 	}
-	
-	/**
-	 * 
-	 * @param idCategoria
-	 * @return
-	 */
-	
-	
-	@RequestMapping(value="/productos/{idCategoria}", method = RequestMethod.GET)
-	public List<Producto> productosPorIdCategoria(@PathVariable("idCategoria") Integer idCategoria){
-		System.out.println("Busca productos por id de categoria");
-		List<Producto> productos = categoriaRepository.findByCategoriaIdCategoria(idCategoria);
-		//System.out.println(usuario);
-		//if(usuario==null)throw new DataIntegrityViolationException("No existe el usuario con el id de producto asociado: "+productId);
-
-		return productos;
-	}
-	
-	
 	
 	/******************************************************************/
 	/*			  		  SECCIÓN POST (CREAR)						  */
@@ -107,16 +73,10 @@ public class ControllerCategoria {
 	 * */
 	@RequestMapping(value="/categorias", method = RequestMethod.POST)
 	public Categoria crear(@RequestBody Categoria categoriaCrear){
-		System.out.println("He recibido la peticion");
+		System.out.println("Crear categoria");
 		Categoria categoria = new Categoria(categoriaCrear.getIdCategoria(),categoriaCrear.getDescripccion(),categoriaCrear.getNombre());
 		
-
-		System.out.println("Almacenar categoria");
-
-		Categoria categoria2 = categoriaRepository.save(categoria);
-
-		System.out.println(categoria2.getNombre());
-		return categoria2;
+		return categoriaRepository.save(categoria);
 	}
 	
 	
@@ -142,13 +102,13 @@ public class ControllerCategoria {
 	 * */
 	@RequestMapping(value="/categorias", method = RequestMethod.PUT)
 	public Categoria modificar(@RequestBody Categoria categoriaCrear){
-		System.out.println("Modificar usuario");
+		System.out.println("Modificar categoria");
 
 		if(categoriaCrear.getIdCategoria() == 0){
 			throw new DataIntegrityViolationException("Debe indicar el id de categoria");
 		}
 
-		/* Se recupera el usuario original */
+		/* Se recupera la categoria original */
 		Categoria categoria = categoriaPorId(categoriaCrear.getIdCategoria());
 
 		/* Se efectuan las modificaciones que sean necesarias. Los setters ya controlan que no sean null */
@@ -177,9 +137,9 @@ public class ControllerCategoria {
 		if(idCategoria == null){
 			throw new DataIntegrityViolationException("Debe indicar un id de categoria");
 		}
-		List<Producto> productos= productosPorIdCategoria(idCategoria);
+		List<Producto> productos= productoRepository.findByCategoriaIdCategoria(idCategoria);
 		if(productos == null | productos.size() == 0){
-			/* Se consulta que ese id de producto existe */
+			/* Se consulta que ese id de categoria existe. Si no existe, ya lanzará excepción el propio método  */
 			categoriaPorId(idCategoria);
 			
 			categoriaRepository.delete(idCategoria);

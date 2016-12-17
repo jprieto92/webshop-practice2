@@ -16,9 +16,6 @@ import java.util.Set;
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Nombre de las b�squedas mapeadas
-	public static final String BUSCAR_TODOS = "Categoria.findAll";
-	public static final String BUSCAR_TODOS_SOLO_ID_Y_NOMBRE = "Categoria.todos_solo_id_nombre";
 	@Id
 	@GeneratedValue
 	@Column(name="id_categoria")
@@ -36,12 +33,12 @@ public class Categoria implements Serializable {
 	}
 	
 
-	public Categoria(int idCategoria, String descripccion, String nombre, Set<Producto> producto) {
+	public Categoria(int idCategoria, String descripccion, String nombre/*, Set<Producto> producto*/) {
 		super();
 		this.idCategoria = idCategoria;
 		this.descripccion = descripccion;
 		this.nombre = nombre;
-		this.producto = producto;
+		//this.producto = producto;
 	}
 
 
@@ -58,7 +55,7 @@ public class Categoria implements Serializable {
 	}
 
 	public void setDescripccion(String descripccion) {
-		this.descripccion = descripccion;
+		this.descripccion = descripccion != null ? descripccion : this.descripccion;
 	}
 
 	public String getNombre() {
@@ -66,7 +63,7 @@ public class Categoria implements Serializable {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = nombre != null ? nombre : this.nombre;
 	}
 
 	/* (non-Javadoc)

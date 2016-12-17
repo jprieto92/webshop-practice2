@@ -18,7 +18,8 @@ public class TipoUsuario implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private int id_tipoUsuario;
+	@Column(name="id_tipoUsuario")
+	private int idTipoUsuario;
 
 	private String descripccion;
 
@@ -31,12 +32,12 @@ public class TipoUsuario implements Serializable {
 	public TipoUsuario() {
 	}
 
-	public int getId_tipoUsuario() {
-		return this.id_tipoUsuario;
+	public int getIdTipoUsuario() {
+		return this.idTipoUsuario;
 	}
 
-	public void setId_tipoUsuario(int id_tipoUsuario) {
-		this.id_tipoUsuario = id_tipoUsuario;
+	public void setIdTipoUsuario(int idTipoUsuario) {
+		this.idTipoUsuario = idTipoUsuario;
 	}
 
 	public String getDescripccion() {

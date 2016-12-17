@@ -1,6 +1,5 @@
-package basura;
+package handlers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -12,8 +11,6 @@ import javax.ws.rs.client.WebTarget;
 import entitiesJPA.Disponibilidad;
 import entitiesJPA.Producto;
 import entityManagers.DisponibilidadManager;
-import entityManagers.ProductManager;
-import handlers.ActionHandler;
 
 /**ShowFormChangeAvailabilityRequestHandler --> Se encarga de mostrar 
  * las diferentes opciones para el cambio de la disponibilidad de un producto*/
@@ -26,17 +23,19 @@ public class ShowFormChangeAvailabilityRequestHandler  extends ActionHandler{
 		if(message == null){
 			message = "";
 		}
-		
+
 		//Se recoge la idProducto de la peticion
-		int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+		String idProducto = request.getParameter("idProducto");
 
 		//REST Client using GET Verb and Path Variable
 		Client client = ClientBuilder.newClient();
-		Producto producto = null;
+		Producto productoBBDD = null;
 
 		try {
-			WebTarget webResource = client.target("http://localhost:8020").path("idProducto");
-			producto = webResource.request().accept("application/json").get(Producto.class);
+			WebTarget webResource = client.target("http://localhost:8020").path("productos")
+					.path(idProducto);
+
+			productoBBDD = webResource.request().accept("application/json").get(Producto.class);
 
 		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
@@ -47,10 +46,7 @@ public class ShowFormChangeAvailabilityRequestHandler  extends ActionHandler{
 		}
 		finally{
 			request.setAttribute("Message", message);
-		}
-		
-		Disponibilidad disponibilidadProducto = producto.getDisponibilidad();
-		
+		}	
 		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
 		DisponibilidadManager gestorDisponibilidades = new DisponibilidadManager();
 		List<Disponibilidad> disponibilidadesBBDD;
@@ -64,10 +60,10 @@ public class ShowFormChangeAvailabilityRequestHandler  extends ActionHandler{
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
+
 		request.setAttribute("listaDeDisponibilidades", disponibilidadesBBDD);
 		request.setAttribute("idProducto", idProducto);
-		request.setAttribute("disponibilidadProducto", disponibilidadProducto);
+		request.setAttribute("disponibilidadProducto", productoBBDD.getDisponibilidad());
 	}
 
 }

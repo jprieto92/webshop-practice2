@@ -1,9 +1,14 @@
 package handlers;
 
 import javax.persistence.NoResultException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
+import java.util.Arrays;
 import java.util.List;
 import entitiesJPA.Categoria;
-import entityManagers.CategoriaManager;
 
 /**ShowFormCreateProductHandler --> Se encarga de devolver las distintas 
  * categorias de un producto para su creacion en el jsp*/
@@ -14,21 +19,27 @@ public class ShowFormCreateProductHandler extends ActionHandler {
 		if(message == null){
 			message = "";
 		}
-		
+
 		//Se pasarán las categorías que debe mostrar en el formulario, cargadas de la BBDD
-		CategoriaManager gestorCategorias = new CategoriaManager();
-		List<Categoria> categoriasBBDD;
-		try{
-			categoriasBBDD =  gestorCategorias.buscarTodas();
-		}
-		catch(NoResultException e){
+		//REST Client using GET Verb
+		Client client = ClientBuilder.newClient();
+		List<Categoria> categoriasBBDD = null;
+
+		try {
+			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
+			categoriasBBDD = Arrays.asList(webResource.request().accept("application/json").get(Categoria[].class));
+
+		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
-			throw new NoResultException(message);
+			throw e;		
+		}
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-		
+
 		request.setAttribute("listaDeCategorias", categoriasBBDD);
 	}
 }

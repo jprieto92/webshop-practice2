@@ -8,7 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -30,24 +29,12 @@ import javax.persistence.TemporalType;
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Nombre de las b�squedas mapeadas
-	public static final String BUSCAR_TODOS = "Usuario.seleccionarTodos";
-	public static final String BUSCAR_NOMBRE = "Usuario.seleccionarNombre";
-	public static final String BUSCAR_APELLIDO_1 = "Usuario.seleccionarApellido1";
-	public static final String BUSCAR_APELLIDO_2 = "Usuario.seleccionarApellido2";
-	public static final String BUSCAR_CIUDAD = "Usuario.seleccionarCiudad";
-	public static final String BUSCAR_EMAIL = "Usuario.seleccionarEmail";
-	public static final String BUSCAR_CREDENCIALES = "Usuario.comprobarCredenciales";
-	public static final String BUSCAR_CREDENCIALES_SOLO_ID = "Usuario.comprobarCredencialesSoloId";
-	public static final String DEVOLVER_TIPO_USUARIO_DADO_EMAIL = "Usuario.devuelveIdTipoUsuarioDadoEmail";
-	public static final String BUSCAR_USUARIOS_USERS = "Usuario.buscaTodosUsuariosTipoUser";
-
 	@Id
 	@Column(name="email")
 	private String email;
-	
+
 	private String nombre;
-	
+
 	private String apellido1;
 
 	private String apellido2;
@@ -55,11 +42,12 @@ public class Usuario implements Serializable {
 	private String ciudad;
 
 	private int telefono;
-	
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_alta")
 	private Date fechaAlta;
 	
+	@Lob
 	private String contraseña;
 
 	@Lob
@@ -70,10 +58,25 @@ public class Usuario implements Serializable {
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "usuario")
 	private Set<Producto> producto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="tipo_usuario_id")
 	private TipoUsuario tipoUsuario;
-	
+
+	public Usuario(String email, String nombre, String apellido1, String apellido2, String ciudad, int telefono,
+			Date fechaAlta, String contraseña, byte[] imagenPerfil, TipoUsuario tipoUsuario) {
+		super();
+		this.email = email;
+		this.nombre = nombre;
+		this.apellido1 = apellido1;
+		this.apellido2 = apellido2;
+		this.ciudad = ciudad;
+		this.telefono = telefono;
+		this.fechaAlta = fechaAlta;
+		this.contraseña = contraseña;
+		this.imagenPerfil = imagenPerfil;
+		this.tipoUsuario = tipoUsuario;
+	}
+
 	public Usuario() {
 	}
 
@@ -82,7 +85,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email = email != null ? email : this.email;
 	}
 
 	public String getApellido1() {
@@ -90,7 +93,8 @@ public class Usuario implements Serializable {
 	}
 
 	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
+		this.apellido1 = apellido1 != null ? apellido1 : this.apellido1;
+
 	}
 
 	public String getApellido2() {
@@ -98,7 +102,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
+		this.apellido2 = apellido2 != null ? apellido2 : this.apellido2;
 	}
 
 	public String getCiudad() {
@@ -106,7 +110,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
+		this.ciudad = ciudad != null ? ciudad : this.ciudad;
 	}
 
 	public String getContraseña() {
@@ -114,7 +118,9 @@ public class Usuario implements Serializable {
 	}
 
 	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+		if(contraseña != null | contraseña != ""){
+			this.contraseña = contraseña;
+		}
 	}
 
 	public Date getFechaAlta() {
@@ -122,15 +128,15 @@ public class Usuario implements Serializable {
 	}
 
 	public void setFechaAlta(Date fechaAlta) {
-		this.fechaAlta = fechaAlta;
+		this.fechaAlta = fechaAlta != null ? fechaAlta : this.fechaAlta;
 	}
 
 	public byte[] getImagenPerfil() {
-		return this.imagenPerfil;
+		return imagenPerfil;
 	}
 
 	public void setImagenPerfil(byte[] imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
+		this.imagenPerfil = imagenPerfil != null ? imagenPerfil : this.imagenPerfil;
 	}
 
 	public String getNombre() {
@@ -138,15 +144,26 @@ public class Usuario implements Serializable {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = nombre != null ? nombre : this.nombre;
 	}
 
 	public int getTelefono() {
 		return this.telefono;
 	}
-
+	
 	public void setTelefono(int telefono) {
 		this.telefono = telefono;
 	}
+	
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+
+
 
 }

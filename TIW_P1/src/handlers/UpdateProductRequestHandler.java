@@ -13,7 +13,6 @@ import entitiesJPA.Categoria;
 import entitiesJPA.Producto;
 import entitiesJPA.ProductoCrear;
 import entityManagers.CategoriaManager;
-import entityManagers.ProductManager;
 
 /**UpdateProductRequestHandler --> Se encarga de actualizar un producto*/
 public class UpdateProductRequestHandler  extends ActionHandler{

@@ -1,6 +1,8 @@
 package handlers;
 
-import javax.persistence.NoResultException;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -8,8 +10,6 @@ import javax.ws.rs.client.WebTarget;
 
 import entitiesJPA.Producto;
 import entitiesJPA.Usuario;
-import entityManagers.ProductManager;
-import entityManagers.UserManager;
 
 /**ShowFormMostrarProducto --> Se encarga de obtener los parametros necesarios
  * para mostrar un producto*/
@@ -48,23 +48,28 @@ public class ShowFormMostrarProducto extends ActionHandler{
 		 * HAY QUE LLAMAR AL MICROSERVICIO USUARIO QUE DADO UN ID DE PRODUCTO DEVUELVA UN USUARIO
 		 * */
 		
-		//ESTA LLAMADA YA NO SE PUEDE HACER, YA QUE UN PRODUCTO NO LLEVA EL USUARIO. Temporalmente para pruebas se establece un usuario.
-//		String email = productoBBDD.getUsuario().getEmail();
-		String email = "100303631@alumnos.uc3m.es";
+		//REST Client using GET Verb and Path Variable
+		List<Usuario> usuariosBBDD = null;
 		
-		UserManager gestorUsuario = new UserManager();
-		Usuario usuarioBBDD;
-		try{
-			usuarioBBDD =  gestorUsuario.buscarPorEmail(email);
+		try {
+			WebTarget webResource = client.target("http://localhost:8010").path("usuarios")
+					.queryParam("productId", idProducto);
+			usuariosBBDD = Arrays.asList(webResource.request().accept("application/json").get(Usuario[].class));
+
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
 		}
-		catch(NoResultException e){
-			message = message+" "+"No existe el usuario"+".";
-			throw new NoResultException(message);
+		catch(Exception e){
+			throw e;
 		}
 		finally{
 			request.setAttribute("Message", message);
 		}
-
+		
+		//Se obtiene el primer usuario (solo habrá un unico usuario, ya que un producto solo pertenece a un usuario)
+		Usuario usuarioBBDD = usuariosBBDD.get(0);
+		
 		request.setAttribute("usuarioMostrar", usuarioBBDD);
 		request.setAttribute("productoMostrar", productoBBDD);
 	}

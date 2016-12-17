@@ -13,7 +13,7 @@ import entitiesJPA.Producto;
 
 
 public class CategoriaManager {
-
+	/*
 	private EntityManagerFactory emf;
 
 	public CategoriaManager(String unidadDePersistencia)
@@ -165,5 +165,5 @@ public class CategoriaManager {
 		}
 		return "La categoria con id "+idCategoria+" se ha dado de baja correctamente";
 	}
-  	
+  	*/
 }

@@ -3,6 +3,7 @@ package entitiesJPA;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -12,17 +13,11 @@ import java.util.List;
 @Entity
 @Table(name="categoria")
 
-@NamedQueries({ 
-	@NamedQuery(name = Categoria.BUSCAR_TODOS, query="SELECT c FROM Categoria c"),
-	@NamedQuery(name = Categoria.BUSCAR_TODOS_SOLO_ID_Y_NOMBRE, query="SELECT c.idCategoria, c.nombre FROM Categoria c")
-	})
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Nombre de las búsquedas mapeadas
-	public static final String BUSCAR_TODOS = "Categoria.findAll";
-	public static final String BUSCAR_TODOS_SOLO_ID_Y_NOMBRE = "Categoria.todos_solo_id_nombre";
 	@Id
+	@GeneratedValue
 	@Column(name="id_categoria")
 	private int idCategoria;
 
@@ -30,12 +25,22 @@ public class Categoria implements Serializable {
 
 	private String nombre;
 
-	//bi-directional many-to-one association to Producto
-	@OneToMany(mappedBy="categoria")
-	private List<Producto> productos;
-
+	//Una categoria puede tener muchos productos (one-to-many)
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
+	private Set<Producto> producto;
+	
 	public Categoria() {
 	}
+	
+
+	public Categoria(int idCategoria, String descripccion, String nombre/*, Set<Producto> producto*/) {
+		super();
+		this.idCategoria = idCategoria;
+		this.descripccion = descripccion;
+		this.nombre = nombre;
+		//this.producto = producto;
+	}
+
 
 	public int getIdCategoria() {
 		return this.idCategoria;
@@ -50,7 +55,7 @@ public class Categoria implements Serializable {
 	}
 
 	public void setDescripccion(String descripccion) {
-		this.descripccion = descripccion;
+		this.descripccion = descripccion != null ? descripccion : this.descripccion;
 	}
 
 	public String getNombre() {
@@ -58,30 +63,9 @@ public class Categoria implements Serializable {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = nombre != null ? nombre : this.nombre;
 	}
 
-	public List<Producto> getProductos() {
-		return this.productos;
-	}
-
-	public void setProductos(List<Producto> productos) {
-		this.productos = productos;
-	}
-
-	public Producto addProducto(Producto producto) {
-		getProductos().add(producto);
-		producto.setCategoria(this);
-
-		return producto;
-	}
-
-	public Producto removeProducto(Producto producto) {
-		getProductos().remove(producto);
-		producto.setCategoria(null);
-
-		return producto;
-	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */

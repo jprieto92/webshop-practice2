@@ -87,7 +87,7 @@
 			<div class="col-lg-12 text-center">
 				<h4>Propietario</h4>
 				<p>
-					<%out.print(producto.getUsuario().getEmail());%>
+					<%out.print(usuario.getEmail());%>
 				</p>
 			</div>
 		</div>
@@ -102,7 +102,7 @@
 		
 			<form action="ControllerServlet" name="formVerPropietario" novalidate method="post">
 					<input type="hidden" name="pAccion" value="comprobarUsuarioMostrarDatosUsuario"> <input type="hidden" 
-					name="idUsuario" value="<%out.print(producto.getUsuario().getEmail());%>">
+					name="idUsuario" value="<%out.print(usuario.getEmail());%>">
 					<div id="success"></div>
 						<div class="form-group col-xs-12">
 							<button type="submit" class="btn btn-success btn-lg">Ver Propietario</button>
