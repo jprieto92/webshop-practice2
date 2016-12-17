@@ -1,4 +1,4 @@
-<%@page import="jms.MessageChat"%>
+<%@page import="entitiesJPA.Mensaje"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -58,7 +58,7 @@
 						for(String conversacion : nuevasConversaciones){%>
                         <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <p><b>Usuario: </b> <%out.print(conversacion.split(":")[1]);%></p>
+                                <p><b>Usuario: </b> <%out.print(conversacion);%></p>
                          	</div>
                             <form action="ControllerAdminServlet" name="formEnviarMensajeProducto" method="post">
 								<input type="hidden" id="conversacion" name="conversacion" value="<%out.print(conversacion);%>">
