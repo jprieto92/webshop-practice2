@@ -1,8 +1,15 @@
 package handlers;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+import entitiesJPA.Mensaje;
+import entitiesJPA.Producto;
 import handlers.ActionHandler;
-import jms.InteraccionMQ;
-import jms.MessageChat;
 
 /**SentMessageRequestHandler --> Se encarga de mandar a la cola JMS
  * un nuevo mensaje*/
@@ -18,15 +25,26 @@ public class SentMessageRequestHandler extends ActionHandler {
 		String emisor= request.getParameter("emisor");
 		String mensaje= request.getParameter("mensaje");
 		
+		Mensaje mensajeInsertado=null;
 		
-		MessageChat mensajejms = new MessageChat(emisor, destinatario, mensaje);
-		
-		//mensajejms.escrituraJMS(mensajejms);
-		System.out.println("El mensaje a enviar es: " +  mensaje);
-		//InteraccionMQ mq=new InteraccionMQ();
-		InteraccionMQ mq = new InteraccionMQ();
-		mq.escrituraMQ(mensajejms,destinatario);
-	
+		Mensaje mensajeNuevo = new Mensaje(emisor, destinatario, mensaje);
+		//REST Client using POST Verb and JSON
+		Client client = ClientBuilder.newClient();
+		try {
+			WebTarget webResource = client.target("http://localhost:8020").path("mensajes");
+			mensajeInsertado =	webResource.request("application/json").accept("application/json").post(Entity.entity(mensajeNuevo,MediaType.APPLICATION_JSON),Mensaje.class);
+		}catch(WebApplicationException e){
+			message = message+" "+e.getMessage()+".";
+			throw e;		
+		}
+			catch(Exception e){
+			throw e;
+		}
+		finally{
+			request.setAttribute("Message", message);
+		}
+		System.out.println("El mensaje a enviado es: " +  mensaje);
+
 	}
 
 }

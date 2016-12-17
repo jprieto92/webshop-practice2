@@ -1,5 +1,5 @@
 <%@page import="entitiesJPA.Producto"%>
-<%@page import="jms.MessageChat"%>
+<%@page import="entitiesJPA.Mensaje"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -39,7 +39,8 @@
 <%String mensaje = (String) request.getAttribute("chatMessage");
   HttpSession sesion = request.getSession(false);
   String usuarioSession = (String) session.getAttribute("userEmailSession");
-  List<MessageChat> mensajesRecibidos =  (List<MessageChat>)request.getAttribute("mensajesRecibidos");%>
+  String conversacion= (String) session.getAttribute("conversacion");
+  List<Mensaje> mensajesRecibidos =  (List<Mensaje>)request.getAttribute("mensajesRecibidos");%>
 <!-- Register Product Section -->
     <section id="MessageSection">
         <div class="container">
@@ -56,26 +57,26 @@
                     <!-- IMPORTANTE, BUCLE FOR QUE GENERA ESTE CÓDIGO TANTAS VECES COMO MENSAJES TENGAMOS -->
                     <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <p class="help-block text-danger"><h5>Conversación con: <%out.print(mensajesRecibidos.get(0).getAuthor());%></h5>
+                                <p class="help-block text-danger"><h5>Conversación con: <%out.print(conversacion);%></h5>
                                 </p>
                             </div>
                     </div>
              		<%if(mensajesRecibidos!=null){
-						for(MessageChat mensajeNuevo : mensajesRecibidos){%>
+						for(Mensaje mensajeNuevo : mensajesRecibidos){%>
                        <div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <textarea cols="100" rows="4" placeholder="<%out.print(mensajeNuevo.getText());%>" disabled></textarea>
+                                <textarea cols="100" rows="4" placeholder="<%out.print(mensajeNuevo.getMensaje());%>" disabled></textarea>
                             </div>
                         </div>
                         <%}}%>
                         <br>
                         <form action="ControllerServlet" name="formResponderMensaje" novalidate method="post">
                         	<input type="hidden" name="pAccion" value="enviarMensajeProducto">
-                        	<input type="hidden" name="destinatario" value="<%out.print(mensajesRecibidos.get(0).getAuthor());%>">
+                        	<input type="hidden" name="destinatario" value="<%out.print(conversacion);%>">
 							<div id="success"></div>
 								<div class="row">
 									<div class="form-group col-xs-12">
-									<button type="submit" class="btn btn-success btn-lg">Responder mensaje</button>
+									<button type="submit" class="btn btn-success btn-lg">Nuevo mensaje</button>
 									</div>
 								</div>
 						</form>
