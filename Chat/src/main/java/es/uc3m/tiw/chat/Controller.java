@@ -24,7 +24,7 @@ import es.uc3m.tiw.chat.domains.*;
 public class Controller {
 
 	@Autowired
-	MensajeRepository chatRepository;
+	MensajeRepository mensajeRepository;
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
@@ -40,7 +40,7 @@ public class Controller {
 	public List<Usuario> conversaciones(
 			@RequestParam(value="email", required=false) String email) 
 			{
-				return chatRepository.findConversations(email);
+				return mensajeRepository.findConversations(email);
 			}
 
 
@@ -55,7 +55,7 @@ public class Controller {
 			@RequestParam(value="user1", required=false) String user2)
 			{
 				
-				return chatRepository.findOneConversation(user1,user2);
+				return mensajeRepository.findOneConversation(user1,user2);
 			}
 
 
@@ -91,7 +91,7 @@ public class Controller {
 
 		System.out.println("Almacenar mensaje");
 
-		Mensaje mensaje2 = chatRepository.save(mensaje);
+		Mensaje mensaje2 = mensajeRepository.save(mensaje);
 
 		System.out.println(mensaje2.getMensajeId());
 		return mensaje2;

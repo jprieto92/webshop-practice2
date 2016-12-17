@@ -22,8 +22,8 @@ public interface MensajeRepository  extends CrudRepository<Mensaje, Integer> {
 	@Query("SELECT m FROM Mensaje m WHERE (m.emisor = (SELECT u FROM Usuario u WHERE u.email =:usuario1) and"
 			+ " m.receptor(SELECT u FROM Usuario u WHERE u.email =:usuario2))or "
 			+ "(m.emisor = (SELECT u FROM Usuario u WHERE u.email =:usuario2) and"
-			+ " m.receptor(SELECT u FROM Usuario u WHERE u.email =:usuario1))")
-	public List<Mensaje> findOneConversation(@Param("emisor")String usuario1, @Param("receptor")String usuario2);
+			+ " m.receptor = (SELECT u FROM Usuario u WHERE u.email =:usuario1))")
+	public List<Mensaje> findOneConversation(@Param("usuario1")String usuario1, @Param("usuario2")String usuario2);
 	
 	@Query("SELECT DISTINCT m.emisor FROM Mensaje m WHERE m.receptor = (SELECT u FROM Usuario u WHERE u.email =:receptorId)")
 	public List<Usuario> findConversations(@Param("receptor")String receptorId);
