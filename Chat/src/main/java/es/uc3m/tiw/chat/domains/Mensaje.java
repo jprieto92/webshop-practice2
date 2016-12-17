@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -39,49 +40,57 @@ public class Mensaje implements Serializable {
 	public static final String BUSCAR_CONVERSACION = "Mensaje.buscarConvesacion";
 	
 	@Id
-	@Column(name="mensajeId")
-	private int mensajeId;
+	@Column(name="mensaje_id")    
+    @GeneratedValue(strategy=GenerationType.AUTO)
+	private Integer mensajeId;
 	
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="emisor")
-	private Usuario emisor;
 	
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="receptor")
-	private Usuario receptor;
+	private String emisor;
+	
+	
+	private String receptor;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="fecha_publicacion")
 	private Date fechaPublicacion;
+	public Mensaje(){
+		
+	}
+	public Mensaje(String emisor, String receptor, String mensaje) {
+		super();
+		this.emisor = emisor;
+		this.receptor = receptor;
+		//this.fechaPublicacion = fechaPublicacion;
+		this.mensaje = mensaje;
+	}
 	
+
 	public Mensaje(String mensajeAux) {
 		this.mensaje = mensajeAux;
 	}
 
-	public int getMensajeId() {
+	public Integer getMensajeId() {
 		return mensajeId;
 	}
 
-	public void setMensajeId(int mensajeId) {
-		this.mensajeId = mensajeId;
+	public void setMensajeId(Integer mensajeId) {
+		this.mensajeId = mensajeId != null ? mensajeId : this.mensajeId;
 	}
 
 
-	public Usuario getEmisor() {
+	public String getEmisor() {
 		return emisor;
 	}
 
-	public void setEmisor(Usuario emisor) {
+	public void setEmisor(String emisor) {
 		this.emisor = emisor;
 	}
 
-	public Usuario getReceptor() {
+	public String getReceptor() {
 		return receptor;
 	}
 
-	public void setReceptor(Usuario receptor) {
+	public void setReceptor(String receptor) {
 		this.receptor = receptor;
 	}
 
