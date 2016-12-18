@@ -49,18 +49,23 @@ public class InboxRequestHandler extends ActionHandler {
 			request.setAttribute("Message", message);
 		}
 		
-		List<String> listaEmisores = new ArrayList<String>();
+		List<String> listaConversaciones = new ArrayList<String>();
 		/* Se sacan los emisores de la lista de mensajes */
 		for(int i = 0; i < nuevosMensajes.size(); i++){
-			listaEmisores.add(nuevosMensajes.get(i).getEmisor());
+			if(nuevosMensajes.get(i).getEmisor().equals(usuarioSession))
+			{
+				listaConversaciones.add(nuevosMensajes.get(i).getReceptor());
+			}else{
+				listaConversaciones.add(nuevosMensajes.get(i).getEmisor());
+			}
 		}
 
-		if(listaEmisores!=null && listaEmisores.size()>0)
+		if(listaConversaciones!=null && listaConversaciones.size()>0)
 		{
-			System.out.println("CONVERSACIONES QUE ESTOY RECIBIENDO EN INBOX : ---" + listaEmisores.size());
+			System.out.println("CONVERSACIONES QUE ESTOY RECIBIENDO EN INBOX : ---" + listaConversaciones.size());
 		}
 		/*Aquí debemos de leer de la cola de JMS para enviarle al form los mensajes recibidos*/
-		request.setAttribute("conversacionesNuevas", listaEmisores);
+		request.setAttribute("conversacionesNuevas", listaConversaciones);
 	}
 
 }
