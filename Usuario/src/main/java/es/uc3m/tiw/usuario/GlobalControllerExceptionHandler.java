@@ -17,13 +17,13 @@ class GlobalControllerExceptionHandler {
 	@ResponseStatus(HttpStatus.CONFLICT)  // Error HTTP 409
     @ExceptionHandler(IOException.class)
     public void handleConflictConflict() {
-//        System.out.println("Se ha producido una excepción de tipo IOException - Error HTTP 409");
+	//        System.out.println("Se ha producido una excepción de tipo IOException - Error HTTP 409");
     }
     
     
     @ResponseStatus(HttpStatus.NOT_FOUND)  // Error HTTP 404
     @ExceptionHandler(NotFoundException.class)
     public void handleConflictNotFound() {
-//        System.out.println("Se ha producido una excepción de tipo NotFoundException - Error HTTP 404");
+    //        System.out.println("Se ha producido una excepción de tipo NotFoundException - Error HTTP 404");
     }
 }

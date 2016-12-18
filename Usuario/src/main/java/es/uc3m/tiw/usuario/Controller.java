@@ -194,8 +194,7 @@ public class Controller {
 		usuarioModificado.setApellido2(modificacionesUsuario.getApellido2());
 		usuarioModificado.setCiudad(modificacionesUsuario.getCiudad());
 		usuarioModificado.setTelefono(modificacionesUsuario.getTelefono());
-		usuarioModificado.setFechaAlta(usuarioModificado.getFechaAlta());
-		System.out.println("Tamaño" + modificacionesUsuario.getContraseña().length());
+		//usuarioModificado.setFechaAlta(usuarioModificado.getFechaAlta());
 		usuarioModificado.setContraseña(modificacionesUsuario.getContraseña());	
 		usuarioModificado.setImagenPerfil(modificacionesUsuario.getImagenPerfil());
 
