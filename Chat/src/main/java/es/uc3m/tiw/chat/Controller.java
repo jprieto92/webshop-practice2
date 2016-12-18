@@ -53,8 +53,7 @@ public class Controller {
 		for(int i = 1; i < listaMensajes.size(); i++)
 		{
 			int libre = 0;
-			int j=0;
-			for(j = 0; j < listaMensajesAux.size(); j++){
+			for(int j = 0; j < listaMensajesAux.size(); j++){
 				if(listaMensajes.get(i).getEmisor().equals(email) || 
 					listaMensajes.get(i).getEmisor().equals(listaMensajesAux.get(j).getEmisor())){
 					libre = 1;
@@ -70,8 +69,7 @@ public class Controller {
 		for(int i = 0; i < listaMensajes.size(); i++)
 		{
 			int libre = 0;
-			int j=0;
-			for(j = 0; j < listaMensajesAux.size(); j++){
+			for(int j = 0; j < listaMensajesAux.size(); j++){
 				if(!(listaMensajes.get(i).getEmisor().equals(email)) || 
 					listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getEmisor()) ||
 					listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getReceptor())){
