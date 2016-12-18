@@ -3,6 +3,7 @@ package handlers;
 
 
 import javax.servlet.http.Part;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -56,17 +57,22 @@ public class ModificarUsuarioRequestHandler extends ActionHandler {
 		//REST Client using PUT Verb and JSON
 		Client client = ClientBuilder.newClient();
 		Usuario usuarioInsertado = null;
-
+		
+		/* Línea para provocar la excepción NotFoundException */
+//		usuarioModificado.setEmail("dasdsadas");
+		
 		try {
 			WebTarget webResource = client.target("http://localhost:8010").path("usuarios");
 			usuarioInsertado =	webResource.request("application/json").accept("application/json").put(Entity.entity(usuarioModificado,MediaType.APPLICATION_JSON),Usuario.class);
-
-		}catch(WebApplicationException e){
-			message = message+" "+e.getMessage()+".";
-			throw e;		
+			
+			message = message+" "+"El usuario con email "+usuarioInsertado.getEmail()+" se ha modificado correctamente.";	
+		}
+		/* Se captura el error HTTP 404 a través de la excepción NotFoundException */
+		catch(NotFoundException e){
+				message = "No existe el usuario con email "+usuarioModificado.getEmail()+".";
 		}
 		catch(Exception e){
-			throw e;
+				message = "Se ha producido un error modificando el usuario con email "+usuarioModificado.getEmail()+".";
 		}
 		finally{
 			request.setAttribute("Message", message);
