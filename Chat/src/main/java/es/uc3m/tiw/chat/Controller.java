@@ -45,41 +45,40 @@ public class Controller {
 
 		/* Se limpian los emisores duplicados */
 		List<Mensaje> listaMensajesAux = new ArrayList<Mensaje>();
-	
-		
-		if(!listaMensajes.isEmpty()) listaMensajesAux.add(listaMensajes.get(0));
 
-		// Obtenemos los emisores cuando email receptor
-		for(int i = 1; i < listaMensajes.size(); i++)
-		{
-			int libre = 0;
-			for(int j = 0; j < listaMensajesAux.size(); j++){
-				if(listaMensajes.get(i).getEmisor().equals(email) || 
-					listaMensajes.get(i).getEmisor().equals(listaMensajesAux.get(j).getEmisor())){
-					libre = 1;
-					break;
+		if(!listaMensajes.isEmpty()){
+			// Obtenemos los emisores cuando email receptor
+			for(int i = 0; i < listaMensajes.size(); i++)
+			{
+				int libre = 0;
+				for(int j = 0; j < listaMensajesAux.size(); j++){
+					if(listaMensajes.get(i).getEmisor().equals(email) || 
+							listaMensajes.get(i).getEmisor().equals(listaMensajesAux.get(j).getEmisor())){
+						libre = 1;
+						break;
+					}
+				}
+				if(libre == 0 && !(listaMensajes.get(i).getEmisor().equals(email)))
+				{
+					listaMensajesAux.add(listaMensajes.get(i));
 				}
 			}
-			if(libre == 0)
+			// Obtenemos los receptores cuando email emisor
+			for(int i = 0; i < listaMensajes.size(); i++)
 			{
-				listaMensajesAux.add(listaMensajes.get(i));
-			}
-		}
-		// Obtenemos los receptores cuando email emisor
-		for(int i = 0; i < listaMensajes.size(); i++)
-		{
-			int libre = 0;
-			for(int j = 0; j < listaMensajesAux.size(); j++){
-				if(!(listaMensajes.get(i).getEmisor().equals(email)) || 
-					listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getEmisor()) ||
-					listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getReceptor())){
-					libre = 1;
-					break;
+				int libre = 0;
+				for(int j = 0; j < listaMensajesAux.size(); j++){
+					if(!(listaMensajes.get(i).getEmisor().equals(email)) || 
+							listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getEmisor()) ||
+							listaMensajes.get(i).getReceptor().equals(listaMensajesAux.get(j).getReceptor())){
+						libre = 1;
+						break;
+					}
 				}
-			}
-			if(libre == 0)
-			{
-				listaMensajesAux.add(listaMensajes.get(i));
+				if(libre == 0)
+				{
+					listaMensajesAux.add(listaMensajes.get(i));
+				}
 			}
 		}
 		System.out.println("Conversaciones abiertas obtenidas");

@@ -30,7 +30,7 @@ public interface MensajeRepository  extends CrudRepository<Mensaje, Integer> {
 	 * SELECT year, id, rate FROM h WHERE year BETWEEN 2000 AND 2009 AND id IN (SELECT rid FROM table2) GROUP BY id, year ORDER BY id, rate DESC
 	 *  */
 	//@Query("SELECT m FROM Mensaje m WHERE m.receptor =:receptorId GROUP BY m.emisor, m.mensajeId")
-	@Query("SELECT m FROM Mensaje m WHERE (m.receptor =:receptorId OR m.emisor =:emisorId) ORDER BY m.emisor")
+	@Query("SELECT m FROM Mensaje m WHERE (m.receptor =:receptorId OR m.emisor =:receptorId) ORDER BY m.emisor")
 	public List<Mensaje> findConversations(@Param("receptorId")String receptorId);
 
 }
