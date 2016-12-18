@@ -18,11 +18,12 @@ public class TipoUsuario implements Serializable {
 
 	@Id
 	@GeneratedValue
-	private int id_tipoUsuario;
-
-	private String descripccion;
+	@Column(name="id_tipoUsuario")
+	private int idTipoUsuario;
 
 	private String nombre;
+	
+	private String descripccion;
 
 	//Un tipo de usuario puede tener muchos usuarios (one-to-many)
 	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "tipoUsuario")
@@ -31,12 +32,12 @@ public class TipoUsuario implements Serializable {
 	public TipoUsuario() {
 	}
 
-	public int getId_tipoUsuario() {
-		return this.id_tipoUsuario;
+	public int getIdTipoUsuario() {
+		return this.idTipoUsuario;
 	}
 
-	public void setId_tipoUsuario(int id_tipoUsuario) {
-		this.id_tipoUsuario = id_tipoUsuario;
+	public void setIdTipoUsuario(int idTipoUsuario) {
+		this.idTipoUsuario = idTipoUsuario;
 	}
 
 	public String getDescripccion() {

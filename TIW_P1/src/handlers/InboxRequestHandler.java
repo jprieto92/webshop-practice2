@@ -48,7 +48,7 @@ public class InboxRequestHandler extends ActionHandler {
 		finally{
 			request.setAttribute("Message", message);
 		}
-
+		
 		List<String> listaEmisores = new ArrayList<String>();
 		/* Se sacan los emisores de la lista de mensajes */
 		for(int i = 0; i < nuevosMensajes.size(); i++){

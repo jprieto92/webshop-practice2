@@ -45,7 +45,8 @@ public class Controller {
 
 		/* Se limpian los emisores duplicados */
 		List<Mensaje> listaMensajesAux = new ArrayList<Mensaje>();
-		listaMensajesAux.add(listaMensajes.get(0));
+		
+		if(!listaMensajes.isEmpty()) listaMensajesAux.add(listaMensajes.get(0));
 
 		for(int i = 1; i < listaMensajes.size(); i++){
 			for(int j = 0; j < listaMensajesAux.size(); j++){

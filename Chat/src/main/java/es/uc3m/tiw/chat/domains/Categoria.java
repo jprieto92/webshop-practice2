@@ -2,7 +2,6 @@ package es.uc3m.tiw.chat.domains;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 
@@ -16,33 +15,35 @@ import java.util.Set;
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	// Nombre de las b�squedas mapeadas
-	public static final String BUSCAR_TODOS = "Categoria.findAll";
-	public static final String BUSCAR_TODOS_SOLO_ID_Y_NOMBRE = "Categoria.todos_solo_id_nombre";
 	@Id
 	@GeneratedValue
 	@Column(name="id_categoria")
 	private int idCategoria;
 
+	private String nombre;
+	
 	private String descripccion;
 
-	private String nombre;
-
-//	//Una categoria puede tener muchos productos (one-to-many)
-//	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
-//	private Set<Producto> producto;
+	//Una categoria puede tener muchos productos (one-to-many)
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "categoria")
+	private Set<Producto> producto;
 	
 	public Categoria() {
 	}
 	
-
-	public Categoria(int idCategoria, String descripccion, String nombre /*, Set<Producto> producto*/) {
+	public Categoria(String nombre, String descripccion) {
+		super();
+		this.nombre = nombre;
+		this.descripccion = descripccion;
+	}
+	
+	public Categoria(int idCategoria, String nombre, String descripccion) {
 		super();
 		this.idCategoria = idCategoria;
-		this.descripccion = descripccion;
 		this.nombre = nombre;
-//		this.producto = producto;
+		this.descripccion = descripccion;
 	}
+	
 
 
 	public int getIdCategoria() {
@@ -53,20 +54,20 @@ public class Categoria implements Serializable {
 		this.idCategoria = idCategoria;
 	}
 
-	public String getDescripccion() {
-		return this.descripccion;
-	}
-
-	public void setDescripccion(String descripccion) {
-		this.descripccion = descripccion;
-	}
-
 	public String getNombre() {
 		return this.nombre;
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = nombre != null ? nombre : this.nombre;
+	}
+	
+	public String getDescripccion() {
+		return this.descripccion;
+	}
+
+	public void setDescripccion(String descripccion) {
+		this.descripccion = descripccion != null ? descripccion : this.descripccion;
 	}
 
 	/* (non-Javadoc)
