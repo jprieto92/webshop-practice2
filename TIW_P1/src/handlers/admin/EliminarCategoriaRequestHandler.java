@@ -36,6 +36,7 @@ public class EliminarCategoriaRequestHandler  extends ActionHandler{
 			throw e;		
 		}
 		catch(Exception e){
+			message = message+" "+e.getMessage()+".";
 			throw e;
 		}
 		finally{

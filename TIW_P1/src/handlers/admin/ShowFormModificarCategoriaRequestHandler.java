@@ -37,6 +37,7 @@ public class ShowFormModificarCategoriaRequestHandler  extends ActionHandler{
 			throw e;
 		}
 		catch(Exception e){
+			message = message+" "+e.getMessage()+".";
 			throw e;
 		}
 		finally{

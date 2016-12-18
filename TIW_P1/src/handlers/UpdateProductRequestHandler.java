@@ -2,6 +2,7 @@ package handlers;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.Part;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -59,6 +60,8 @@ public class UpdateProductRequestHandler  extends ActionHandler{
 			WebTarget webResource = client.target("http://localhost:8020").path("productos");
 			productoInsertado =	webResource.request("application/json").accept("application/json").put(Entity.entity(productoModificado,MediaType.APPLICATION_JSON),Producto.class);
 
+		}catch(NotFoundException e){
+			message = "No existe el producto con id "+productoModificado.getProductId()+".";
 		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
 			throw e;		

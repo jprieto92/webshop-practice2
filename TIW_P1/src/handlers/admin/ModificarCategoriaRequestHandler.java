@@ -1,5 +1,6 @@
 package handlers.admin;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -41,6 +42,8 @@ public class ModificarCategoriaRequestHandler  extends ActionHandler{
 			WebTarget webResource = client.target("http://localhost:8050").path("categorias");
 			categoriaInsertada = webResource.request("application/json").accept("application/json").put(Entity.entity(categoriaAInsertar,MediaType.APPLICATION_JSON),Categoria.class);
 
+		}catch(NotFoundException e){
+			message = "No existe la categoria con el id"+categoriaAInsertar.getIdCategoria()+".";
 		}catch(WebApplicationException e){
 			message = message+" "+e.getMessage()+".";
 			throw e;		
