@@ -119,7 +119,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void setContraseña(String contraseña) {
-		if(contraseña != null | contraseña != ""){
+		if(contraseña != null && contraseña.length()>0){
 			this.contraseña = contraseña;
 		}
 	}
