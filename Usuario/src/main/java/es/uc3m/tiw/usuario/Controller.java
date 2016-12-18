@@ -124,7 +124,13 @@ public class Controller {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public Usuario login(@RequestBody UsuarioLogin usuarioLogin){
 		System.out.println("Login usuario");
-		return usuarioRepository.findByEmailAndContraseñaAndTipoUsuarioIdTipoUsuario(usuarioLogin.getEmail(), usuarioLogin.getPass(), usuarioLogin.getIdTipoUsuario());
+		
+		Usuario usuarioReturn = usuarioRepository.findByEmailAndContraseñaAndTipoUsuarioIdTipoUsuario(usuarioLogin.getEmail(), usuarioLogin.getPass(), usuarioLogin.getIdTipoUsuario());
+		
+		// Se lanza error HTTP 409
+		if(usuarioReturn==null)throw new DataIntegrityViolationException("Usuario y/o contraseña incorrectos");
+		
+		return usuarioReturn;
 	}
 
 
